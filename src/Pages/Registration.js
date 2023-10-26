@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import axios from "axios";
 import { Container, Row, Col } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
-import baseUrl from '../config';
 
 function Registration() {
     const [formData, setFormData] = useState({
@@ -23,7 +22,7 @@ function Registration() {
         e.preventDefault();
         try {
             const response = await axios.post(
-                `${baseUrl}/api/User/register`,
+                `${process.env.REACT_APP_BASE_URL}/api/User/register`,
                 formData
             );
             alert("Registration success");
