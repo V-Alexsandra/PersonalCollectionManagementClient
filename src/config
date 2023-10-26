@@ -1,0 +1,3 @@
+const baseUrl = "http://alexav-001-site1.anytempurl.com";
+
+export default baseUrl;
