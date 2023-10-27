@@ -53,7 +53,7 @@ function Login() {
                                 onChange={handleChange}
                                 required
                                 pattern="^\S+@\S+\.\S+$"
-                                title="Please enter a valid email address"
+                                title="Please enter a valid email address."
                             />
                         </Form.Group>
                         <Form.Group>

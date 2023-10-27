@@ -18,6 +18,12 @@ function Registration() {
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
+
+        if (value.length < 3) {
+            setError('The name must contain at least 3 characters.');
+        } else {
+            setError('');
+        }
     };
 
     const handleSubmit = async (e) => {
@@ -66,7 +72,7 @@ function Registration() {
                                 onChange={handleChange}
                                 required
                                 pattern="^\S+@\S+\.\S+$"
-                                title="Please enter a valid email address"
+                                title="Please enter a valid email address."
                             />
                         </Form.Group>
                         <Form.Group>
@@ -76,7 +82,7 @@ function Registration() {
                                 name="password"
                                 value={formData.password}
                                 onChange={handleChange}
-                                required                    
+                                required
                                 title="The entered password must have minimum 8 characters, at least 1 alphabet, 1 number, and 1 special character."
                             />
                         </Form.Group>
