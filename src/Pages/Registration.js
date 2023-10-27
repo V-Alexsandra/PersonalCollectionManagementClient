@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { Container, Row, Col } from "react-bootstrap";
+import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 
 const baseUrl = 'https://alexav-001-site1.anytempurl.com';
@@ -23,6 +23,7 @@ function Registration() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
+            setError("");
             const response = await axios.post(
                 `${baseUrl}/api/User/register`,
                 formData
@@ -34,78 +35,73 @@ function Registration() {
             if (error.response && error.response.data) {
                 setError(error.response.data);
             } else {
-                setError("Login failed. An error occurred.");
+                setError("Registration failed. An error occurred.");
             }
         }
     };
 
     return (
         <Container>
-            <Row>
-                <h1>Registration</h1>
-                <Col>
-                    <form onSubmit={handleSubmit}>
+            <Row className="justify-content-center">
+                <Col md={6}>
+                    <h3 className="text-center mt-4">Registration</h3>
+                    <Form onSubmit={handleSubmit}>
                         {error && <p style={{ color: "red" }}>{error}</p>}
-                        <div className="form-group">
-                            <label htmlFor="name">Name</label>
-                            <input
+                        <Form.Group>
+                            <Form.Label>Name</Form.Label>
+                            <Form.Control
                                 type="text"
                                 name="name"
                                 value={formData.name}
                                 onChange={handleChange}
-                                className="form-control"
                                 required
                             />
-                        </div>
-                        <div className="form-group">
-                            <label htmlFor="email">Email</label>
-                            <input
+                        </Form.Group>
+                        <Form.Group>
+                            <Form.Label>Email</Form.Label>
+                            <Form.Control
                                 type="email"
                                 name="email"
                                 value={formData.email}
                                 onChange={handleChange}
-                                className="form-control"
                                 required
                                 pattern="^\S+@\S+\.\S+$"
                                 title="Please enter a valid email address"
                             />
-                        </div>
-                        <div className="form-group">
-                            <label htmlFor="password">Password</label>
-                            <input
+                        </Form.Group>
+                        <Form.Group>
+                            <Form.Label>Password</Form.Label>
+                            <Form.Control
                                 type="password"
                                 name="password"
                                 value={formData.password}
                                 onChange={handleChange}
-                                className="form-control"
-                                required
+                                required                    
+                                title="The entered password must have minimum 8 characters, at least 1 alphabet, 1 number, and 1 special character."
                             />
-                        </div>
-                        <div className="form-group">
-                            <label htmlFor="repeatPassword">Repeat Password</label>
-                            <input
+                        </Form.Group>
+                        <Form.Group>
+                            <Form.Label>Repeat Password</Form.Label>
+                            <Form.Control
                                 type="password"
                                 name="repeatPassword"
                                 value={formData.repeatPassword}
                                 onChange={handleChange}
-                                className="form-control"
                                 required
                             />
-                        </div>
-                        <br></br>
+                        </Form.Group>
+                        <br />
                         <Row>
-                            <Col>
-                                <button type="submit" className="btn btn-primary">
+                            <Form.Group className="d-flex justify-content-between">
+                                <Button type="submit" variant="primary" className="btn-block">
                                     Register
-                                </button>
-                            </Col>
-                            <Col>
+                                </Button>
                                 <Link to="/">
-                                    <button className="btn btn-primary">Login</button>
+                                    <Button variant="secondary" className="btn-block">LogIn</Button>
                                 </Link>
-                            </Col>
+                            </Form.Group>
                         </Row>
-                    </form>
+                    </Form>
                 </Col>
             </Row>
         </Container>

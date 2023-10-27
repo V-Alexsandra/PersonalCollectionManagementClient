@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { Container, Row, Col } from "react-bootstrap";
+import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 
 const baseUrl = 'https://alexav-001-site1.anytempurl.com';
@@ -39,49 +39,45 @@ function Login() {
 
     return (
         <Container>
-            <Row>
-                <h1>Log In</h1>
-                <Col>
-                    <form onSubmit={handleSubmit}>
+            <Row className="justify-content-center">
+                <Col md={6}>
+                    <h3 className="text-center mt-4">Log In</h3>
+                    <Form onSubmit={handleSubmit}>
                         {error && <p style={{ color: "red" }}>{error}</p>}
-                        <div className="form-group">
-                            <label htmlFor="email">Email</label>
-                            <input
+                        <Form.Group>
+                            <Form.Label>Email</Form.Label>
+                            <Form.Control
                                 type="email"
                                 name="email"
                                 value={formData.email}
                                 onChange={handleChange}
-                                className="form-control"
                                 required
                                 pattern="^\S+@\S+\.\S+$"
                                 title="Please enter a valid email address"
                             />
-                        </div>
-                        <div className="form-group">
-                            <label htmlFor="password">Password</label>
-                            <input
+                        </Form.Group>
+                        <Form.Group>
+                            <Form.Label>Password</Form.Label>
+                            <Form.Control
                                 type="password"
                                 name="password"
                                 value={formData.password}
                                 onChange={handleChange}
-                                className="form-control"
                                 required
                             />
-                        </div>
-                        <br></br>
+                        </Form.Group>
+                        <br />
                         <Row>
-                            <Col>
-                                <button type="submit" className="btn btn-primary">
-                                    Login
-                                </button>
-                            </Col>
-                            <Col>
+                            <Form.Group className="d-flex justify-content-between">
+                                <Button type="submit" variant="primary"  className="btn-block">
+                                    LogIn
+                                </Button>
                                 <Link to="/registration">
-                                    <button className="btn btn-primary">Registration</button>
+                                    <Button variant="secondary"  className="btn-block">Registration</Button>
                                 </Link>
-                            </Col>
+                            </Form.Group>
                         </Row>
-                    </form>
+                    </Form>
                 </Col>
             </Row>
         </Container>
