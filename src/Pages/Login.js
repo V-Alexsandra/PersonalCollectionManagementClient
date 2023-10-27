@@ -3,6 +3,8 @@ import axios from "axios";
 import { Container, Row, Col } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 
+const baseUrl = 'https://alexav-001-site1.anytempurl.com';
+
 function Login() {
     const [formData, setFormData] = useState({
         email: "",
@@ -19,7 +21,7 @@ function Login() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/api/User/login`, formData);
+            const response = await axios.post(`${baseUrl}/api/User/login`, formData);
             const { id, token } = response.data;
 
             sessionStorage.setItem("token", token);

@@ -3,6 +3,8 @@ import axios from "axios";
 import { Container, Row, Col } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 
+const baseUrl = 'https://alexav-001-site1.anytempurl.com';
+
 function Registration() {
     const [formData, setFormData] = useState({
         name: "",
@@ -22,7 +24,7 @@ function Registration() {
         e.preventDefault();
         try {
             const response = await axios.post(
-                `${process.env.REACT_APP_BASE_URL}/api/User/register`,
+                `${baseUrl}/api/User/register`,
                 formData
             );
             alert("Registration success");
