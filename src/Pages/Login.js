@@ -56,7 +56,7 @@ function Login() {
                                 title="Please enter a valid email address."
                             />
                         </Form.Group>
-                        <Form.Group>
+                        <Form.Group className="mt-2">
                             <Form.Label>Password</Form.Label>
                             <Form.Control
                                 type="password"

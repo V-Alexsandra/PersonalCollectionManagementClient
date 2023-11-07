@@ -63,7 +63,7 @@ function Registration() {
                                 required
                             />
                         </Form.Group>
-                        <Form.Group>
+                        <Form.Group className="mt-2">
                             <Form.Label>Email</Form.Label>
                             <Form.Control
                                 type="email"
@@ -75,7 +75,7 @@ function Registration() {
                                 title="Please enter a valid email address."
                             />
                         </Form.Group>
-                        <Form.Group>
+                        <Form.Group className="mt-2">
                             <Form.Label>Password</Form.Label>
                             <Form.Control
                                 type="password"
@@ -86,7 +86,7 @@ function Registration() {
                                 title="The entered password must have minimum 8 characters, at least 1 alphabet, 1 number, and 1 special character."
                             />
                         </Form.Group>
-                        <Form.Group>
+                        <Form.Group className="mt-2">
                             <Form.Label>Repeat Password</Form.Label>
                             <Form.Control
                                 type="password"
