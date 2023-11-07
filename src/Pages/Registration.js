@@ -52,7 +52,7 @@ function Registration() {
                 <Col md={6}>
                     <h3 className="text-center mt-4">Registration</h3>
                     <Form onSubmit={handleSubmit}>
-                        {error && <p style={{ color: "red" }}>{error}</p>}
+                        {error && <div className="alert alert-danger mt-4">{error}</div>}
                         <Form.Group>
                             <Form.Label>Name</Form.Label>
                             <Form.Control
@@ -102,7 +102,7 @@ function Registration() {
                                 <Button type="submit" variant="primary" className="btn-block">
                                     Register
                                 </Button>
-                                <Link to="/">
+                                <Link to="/login">
                                     <Button variant="secondary" className="btn-block">LogIn</Button>
                                 </Link>
                             </Form.Group>

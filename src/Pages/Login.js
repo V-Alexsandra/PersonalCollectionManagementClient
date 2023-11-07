@@ -27,7 +27,7 @@ function Login() {
             sessionStorage.setItem("token", token);
             sessionStorage.setItem("id", id);
 
-            navigate("/users");
+            navigate("/");
         } catch (error) {
             if (error.response && error.response.data) {
                 setError(error.response.data);
@@ -43,7 +43,7 @@ function Login() {
                 <Col md={6}>
                     <h3 className="text-center mt-4">Log In</h3>
                     <Form onSubmit={handleSubmit}>
-                        {error && <p style={{ color: "red" }}>{error}</p>}
+                        {error && <div className="alert alert-danger mt-4">{error}</div>}
                         <Form.Group>
                             <Form.Label>Email</Form.Label>
                             <Form.Control
@@ -69,11 +69,11 @@ function Login() {
                         <br />
                         <Row>
                             <Form.Group className="d-flex justify-content-between">
-                                <Button type="submit" variant="primary"  className="btn-block">
+                                <Button type="submit" variant="primary" className="btn-block">
                                     LogIn
                                 </Button>
                                 <Link to="/registration">
-                                    <Button variant="secondary"  className="btn-block">Registration</Button>
+                                    <Button variant="secondary" className="btn-block">Registration</Button>
                                 </Link>
                             </Form.Group>
                         </Row>
