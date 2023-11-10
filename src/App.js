@@ -6,6 +6,7 @@ import Login from './Pages/Login';
 import Admin from './Pages/Admin';
 import Profile from './Pages/Profile';
 import Main from './Pages/Main';
+import Collection from './Pages/Collection';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Route path="/registration" element={<Registration />} />
         <Route path="/admin" element={<Admin />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/collection/:name" element={<Collection />} />
         <Route path="/" element={<Main />} />
       </Routes>
     </BrowserRouter>

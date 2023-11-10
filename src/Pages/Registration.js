@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import axios from "axios";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
+import { toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const baseUrl = 'https://alexav-001-site1.anytempurl.com';
 
@@ -18,12 +21,6 @@ function Registration() {
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
-
-        if (value.length < 3) {
-            setError('The name must contain at least 3 characters.');
-        } else {
-            setError('');
-        }
     };
 
     const handleSubmit = async (e) => {
@@ -34,9 +31,12 @@ function Registration() {
                 `${baseUrl}/api/User/register`,
                 formData
             );
-            alert("Registration success");
-            navigate("/");
-
+            
+            toast.success('Collection created.', {
+                onClose: () => {
+                    navigate("/login");
+                }
+            });
         } catch (error) {
             if (error.response && error.response.data) {
                 setError(error.response.data);
@@ -48,6 +48,10 @@ function Registration() {
 
     return (
         <Container>
+            <ToastContainer
+                position="top-center"
+                autoClose={2000}
+            />
             <Row className="justify-content-center">
                 <Col md={6}>
                     <h3 className="text-center mt-4">Registration</h3>
