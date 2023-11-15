@@ -17,6 +17,8 @@ function Collection() {
     const [topicData, setTopicData] = useState({});
     const [collectionItems, setCollectionItems] = useState([]);
     const [showCreateModal, setShowCreateModal] = useState(false);
+    const [collectionFields, setCollectionFields] = useState([]);
+    const [collectionFieldValues, setCollectionFieldValues] = useState([]);
 
     const collectionId = localStorage.getItem('selectedCollectionId');
     const token = sessionStorage.getItem("token");
@@ -33,13 +35,28 @@ function Collection() {
             setCollectionData(response.data);
             getCollectionTopic(response.data.topicId);
             getCollectionItems();
+            getCollectionFields();
+        } catch (error) {
+            handleError(error);
+        }
+    };
+
+
+    const getCollectionFields = async () => {
+        try {
+            const response = await axios.get(`${baseUrl}/api/Collection/collectionfields/${collectionId}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                }
+            });
+
+            setCollectionFields(response.data);
         } catch (error) {
             handleError(error);
         }
     };
 
     const getCollectionTopic = async (topicId) => {
-        console.log(collectionData);
         try {
             const response = await axios.get(`${baseUrl}/api/Collection/topoicbyid/${topicId}`, {
                 headers: {
@@ -68,10 +85,14 @@ function Collection() {
     };
 
     useEffect(() => {
-        if (!token || !currentUserId) {
-            window.location.href = "/";
-        } else {
-            getCollectionData();
+        try {
+            if (!token || !currentUserId) {
+                window.location.href = "/";
+            } else {
+                getCollectionData();
+            }
+        } catch (error) {
+            handleError(error);
         }
     }, [token, currentUserId]);
 
@@ -91,17 +112,13 @@ function Collection() {
             setError("");
             const response = await axios.post(`${baseUrl}/api/Item/create`, newItemData);
             setShowCreateModal(false);
-            toast.success('Collection created.', {
+            toast.success('Item created.', {
                 onClose: () => {
                     window.location.reload();
                 }
             });
         } catch (error) {
-            if (error.response && error.response.data) {
-                setError(error.response.data);
-            } else {
-                setError("Failed to create the collection. An error occurred.");
-            }
+            handleError(error);
         }
     };
 
@@ -112,6 +129,52 @@ function Collection() {
     const handleDeleteItem = () => {
         // Handle delete logic
     }
+
+    const renderCollectionItems = () => {
+        const hasStringField = collectionFields.some((field) => field.type === "string");
+        const hasDateTimeField = collectionFields.some((field) => field.type === "datetime");
+
+        const formatDate = (dateString) => {
+            const options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' };
+            return new Date(dateString).toLocaleDateString(undefined, options);
+        };
+
+        return collectionItems.map((item) => {
+            return (
+                <tr key={item.id}>
+                    {hasStringField &&
+                        collectionFields.map(
+                            (field) =>
+                                field.type === "string" && (
+                                    <td key={field.id}>
+                                        {collectionFieldValues.find((value) => value.collectionFieldId === field.id)?.value || ""}
+                                    </td>
+                                )
+                        )}
+                    {hasDateTimeField &&
+                        collectionFields.map(
+                            (field) =>
+                                field.type === "date" && (
+                                    <td key={field.id}>
+                                        {formatDate(collectionFieldValues.find((value) => value.collectionFieldId === field.id)?.value)}
+                                    </td>
+                                )
+                        )}
+                    <td>{formatDate(item.creationDate)}</td>
+                    <td>
+                        <Button variant="primary" size="sm" onClick={() => handleEditItem(item.id)}>
+                            Edit
+                        </Button>
+                    </td>
+                    <td>
+                        <Button variant="danger" size="sm" onClick={() => handleDeleteItem(item.id)}>
+                            Delete
+                        </Button>
+                    </td>
+                </tr>
+            );
+        });
+    };
 
     return (
         <>
@@ -171,6 +234,29 @@ function Collection() {
                         <CreateItem createItem={handleItemCreate} />
                     </Modal.Body>
                 </Modal>
+                <Row>
+                    <Col>
+                        <div className="mt-4">
+                            <Table bordered hover>
+                                <thead>
+                                    <tr>
+                                        {collectionFields.map(field => (
+                                            (field.type === "string" || field.type === "datetime") && (
+                                                <th key={field.id}>{field.name}</th>
+                                            )
+                                        ))}
+                                        <th>Creation Date</th>
+                                        <th></th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {renderCollectionItems()}
+                                </tbody>
+                            </Table>
+                        </div>
+                    </Col>
+                </Row>
             </Container>
         </>
     );

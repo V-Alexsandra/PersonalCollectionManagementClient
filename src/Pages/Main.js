@@ -3,6 +3,7 @@ import { Button, Container, Row, Col } from "react-bootstrap";
 import Search from "../Components/Search";
 import ProfileBtn from "../Components/ProfileBtn";
 import { Link } from "react-router-dom";
+import ChooseTheme from "../Components/ChooseTheme";
 
 function Main() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -23,7 +24,7 @@ function Main() {
         <>
             <Container>
                 <Row>
-                    <Col md={8} sm={12}>
+                    <Col md={7} sm={12}>
                         <Search />
                     </Col>
                     {!isLoggedIn ? (
@@ -45,6 +46,9 @@ function Main() {
                                 <ProfileBtn />
                             )}
                         </Col>}
+                    <Col md={1} sm={12}>
+                        <ChooseTheme />
+                    </Col>
                 </Row>
             </Container >
         </>

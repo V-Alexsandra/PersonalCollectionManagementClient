@@ -8,7 +8,7 @@ function ProfileBtn() {
         <>
             <Container>
                 <Row className="justify-content-center">
-                    <Col className="text-center mt-3">
+                    <Col className="mt-3">
                         <Link to="/profile">
                             <Button variant="primary" className="btn-block">
                                 Profile

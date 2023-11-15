@@ -13,26 +13,49 @@ const CreateItem = ({ createItem }) => {
     const [imageLink, setImageLink] = useState("");
     const [tagInput, setTagInput] = useState("");
     const [tags, setTags] = useState([]);
+    const [collectionFields, setCollectionFields] = useState([]);
     const [fieldValue, setFieldValue] = useState("");
     const [autocompleteOptions, setAutocompleteOptions] = useState([]);
+    const [fieldValues, setFieldValues] = useState({});
 
     const token = sessionStorage.getItem("token");
     const currentUserId = sessionStorage.getItem("id");
+    const collectionId = localStorage.getItem('selectedCollectionId');
 
     useEffect(() => {
         fetchTagsAutocomplete();
+        getCollectionFields();
     }, []);
 
     const fetchTagsAutocomplete = async () => {
         try {
-            const response = await axios.get(`${baseUrl}/api/Tag/all`, {
+            const response = await axios.get(`${baseUrl}/api/Item/alltags`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                }
+            });
+    
+            const options = response.data.map(tagObject => ({
+                label: tagObject.tag,
+                value: tagObject.tag,
+            }));
+            setAutocompleteOptions(options);
+    
+            console.log("Autocomplete Options:", options);
+        } catch (error) {
+            handleError(error);
+        }
+    };    
+
+    const getCollectionFields = async () => {
+        try {
+            const response = await axios.get(`${baseUrl}/api/Collection/collectionfields/${collectionId}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                 }
             });
 
-            const tagNames = response.data.map(tag => tag.Tag);
-            setAutocompleteOptions(tagNames.map(tagName => ({ value: tagName, label: tagName })));
+            setCollectionFields(response.data);
         } catch (error) {
             handleError(error);
         }
@@ -40,32 +63,33 @@ const CreateItem = ({ createItem }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
-        const formattedTags = tags.map(tag => (tag.startsWith("#") ? tag : `#${tag}`));
-
+    
+        const itemFieldValues = Object.entries(fieldValues).map(([fieldId, value]) => ({
+            collectionFieldId: fieldId,
+            value,
+        }));
+    
+        const formattedTags = tags.map((tag) => (tag.startsWith("#") ? tag : `#${tag}`));
+    
         const newItem = {
             name,
-            tags: formattedTags.map(tag => ({ tag })),
-            imageLink,
-            collectionId: 0,
-            itemFieldValues: [
-                {
-                    value: fieldValue,
-                    collectionFieldId: 4 //
-                }
-            ]
+            tags: formattedTags.map((tag) => ({ tag })),
+            imageLink: "null",
+            collectionId,
+            itemFieldValues,
         };
-
+    
         try {
             createItem(newItem);
             setName("");
             setTags([]);
             setImageLink("");
             setFieldValue("");
+            setFieldValues({});
         } catch (error) {
             handleError(error);
         }
-    };
+    };    
 
     const handleError = (error) => {
         if (error.response && error.response.status === 401) {
@@ -92,6 +116,74 @@ const CreateItem = ({ createItem }) => {
         setTags(tags.filter(tag => tag !== removedTag));
     };
 
+    const handleFieldValueChange = (fieldId, value) => {
+        setFieldValues(prevFieldValues => ({
+            ...prevFieldValues,
+            [fieldId]: value
+        }));
+    };    
+
+    const renderCollectionFields = () => {
+        return collectionFields.map((field) => (
+            <Form.Group key={field.id} as={Row} className="mt-2">
+                <Form.Label column sm="2">{field.name}</Form.Label>
+                <Col sm="10" className="mt-2">
+                    {field.type === "string" && (
+                        <Form.Control
+                            type="text"
+                            value={fieldValues[field.id] || ""}
+                            onChange={(e) => handleFieldValueChange(field.id, e.target.value)}
+                            placeholder={`Enter ${field.name}`}
+                        />
+                    )}
+                    {field.type === "int" && (
+                        <Form.Control
+                            type="number"
+                            value={fieldValues[field.id] || ""}
+                            onChange={(e) => handleFieldValueChange(field.id, e.target.value)}
+                            placeholder={`Enter ${field.name}`}
+                        />
+                    )}
+                    {field.type === "bool" && (
+                        <Form.Check
+                            type="checkbox"
+                            label={field.name}
+                            checked={fieldValues[field.id] || false}
+                            onChange={(e) => handleFieldValueChange(field.id, e.target.checked)}
+                        />
+                    )}
+                    {field.type === "double" && (
+                        <Form.Control
+                            type="number"
+                            step="0.01"
+                            value={fieldValues[field.id] || ""}
+                            onChange={(e) => handleFieldValueChange(field.id, e.target.value)}
+                            placeholder={`Enter ${field.name}`}
+                        />
+                    )}
+                    {field.type === "date" && (
+                        <Form.Control
+                            type="date"
+                            value={fieldValues[field.id] || ""}
+                            onChange={(e) => handleFieldValueChange(field.id, e.target.value)}
+                        />
+                    )}
+                </Col>
+            </Form.Group>
+        ));
+    };
+
+    const customStyles = {
+        control: (provided, state) => ({
+          ...provided,
+          color: 'black',
+        }),
+        option: (provided, state) => ({
+          ...provided,
+          color: 'black',
+        }),
+      };
+
     return (
         <>
             <Form onSubmit={handleSubmit}>
@@ -104,7 +196,7 @@ const CreateItem = ({ createItem }) => {
                 </Form.Group>
                 <Form.Group as={Row} className="mt-2">
                     <Form.Label column sm="2">Tags</Form.Label>
-                    <Col sm="10">
+                    <Col sm="10" className="mt-2">
                         <Select
                             isMulti
                             options={autocompleteOptions}
@@ -112,46 +204,18 @@ const CreateItem = ({ createItem }) => {
                             onChange={(selectedOption) => setTags(selectedOption ? selectedOption.map(option => option.value) : [])}
                             onInputChange={handleTagInputChange}
                             onKeyDown={handleTagKeyDown}
-                            placeholder="Imput tags..."
+                            placeholder="Input tags..."
+                            styles={customStyles}
                         />
                     </Col>
                 </Form.Group>
-                <Form.Group as={Row} className="mt-2">
-                    <Form.Label column sm="2">Image Link</Form.Label>
-                    <Col sm="10">
-                        <Form.Control type="text" value={imageLink} onChange={(e) => setImageLink(e.target.value)} placeholder="Image Link" />
-                    </Col>
-                </Form.Group>
-                <Form.Group as={Row} className="mt-2">
-                    <Form.Label column sm="2">Field Value</Form.Label>
-                    <Col sm="10">
-                        <Form.Control type="text" value={fieldValue} onChange={(e) => setFieldValue(e.target.value)} placeholder="Field Value" />
-                    </Col>
-                </Form.Group>
+                {renderCollectionFields()}
                 <Row className="mt-2">
                     <Col>
                         <Button type="submit" variant="success">Create</Button>
                     </Col>
                 </Row>
             </Form>
-            {tags.length > 0 && (
-                <div className="mt-3">
-                    <strong>Selected tags:</strong>
-                    <ul>
-                        {tags.map((tag, index) => (
-                            <li key={index}>
-                                {tag}
-                                <span
-                                    style={{ cursor: "pointer", marginLeft: "0.5rem", color: "red" }}
-                                    onClick={() => handleRemoveTag(tag)}
-                                >
-                                    &times;
-                                </span>
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-            )}
         </>
     );
 }
