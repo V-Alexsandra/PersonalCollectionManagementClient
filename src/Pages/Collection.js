@@ -8,6 +8,7 @@ import { toast } from 'react-toastify';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import CreateItem from '../Components/CreateItem';
+import { FormattedMessage } from 'react-intl';
 
 const baseUrl = 'https://alexav-001-site1.anytempurl.com';
 
@@ -19,6 +20,8 @@ function Collection() {
     const [showCreateModal, setShowCreateModal] = useState(false);
     const [collectionFields, setCollectionFields] = useState([]);
     const [collectionFieldValues, setCollectionFieldValues] = useState([]);
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [itemToDelete, setItemToDelete] = useState();
 
     const collectionId = localStorage.getItem('selectedCollectionId');
     const token = sessionStorage.getItem("token");
@@ -126,13 +129,32 @@ function Collection() {
         // Handle edit logic
     }
 
-    const handleDeleteItem = () => {
-        // Handle delete logic
-    }
+    const handleDeleteItem = (itemId) => {
+        setItemToDelete(itemId);
+        setShowDeleteModal(true);
+    };
+
+    //
+    const confirmDeleteItem = async () => {
+        try {
+            setError("");
+            await axios.delete(`${baseUrl}/api/Item/Delete/${itemToDelete}`);
+            getCollectionItems();
+            setShowDeleteModal(false);
+            toast.success('Item deleted.', {
+                onClose: () => {
+                    window.location.reload();
+                }
+            });
+        } catch (error) {
+            handleError(error);
+        }
+    };
+
 
     const renderCollectionItems = () => {
         const hasStringField = collectionFields.some((field) => field.type === "string");
-        const hasDateTimeField = collectionFields.some((field) => field.type === "datetime");
+        const hasDateField = collectionFields.some((field) => field.type === "date");
 
         const formatDate = (dateString) => {
             const options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' };
@@ -151,7 +173,7 @@ function Collection() {
                                     </td>
                                 )
                         )}
-                    {hasDateTimeField &&
+                    {hasDateField &&
                         collectionFields.map(
                             (field) =>
                                 field.type === "date" && (
@@ -163,12 +185,12 @@ function Collection() {
                     <td>{formatDate(item.creationDate)}</td>
                     <td>
                         <Button variant="primary" size="sm" onClick={() => handleEditItem(item.id)}>
-                            Edit
+                            <FormattedMessage id="collection.edit" />
                         </Button>
                     </td>
                     <td>
                         <Button variant="danger" size="sm" onClick={() => handleDeleteItem(item.id)}>
-                            Delete
+                            <FormattedMessage id="collection.delete" />
                         </Button>
                     </td>
                 </tr>
@@ -194,41 +216,41 @@ function Collection() {
                 {error && <div className="alert alert-danger mt-4">{error}</div>}
                 <Row>
                     <Col className="mt-4">
-                        <h3>Collection Details</h3>
+                        <h3> <FormattedMessage id="collection.details" /></h3>
                     </Col>
                 </Row>
                 <Row>
                     <Col>
-                        <p><b>Name:</b> {collectionData.name}</p>
+                        <p><b><FormattedMessage id="collection.name" />:</b> {collectionData.name}</p>
                     </Col>
                 </Row>
                 <Row>
                     <Col>
-                        <p><b>Description:</b></p>
+                        <p><b><FormattedMessage id="collection.description" />:</b></p>
                         <div dangerouslySetInnerHTML={{ __html: collectionData.description }} />
                     </Col>
                 </Row>
                 <Row>
                     <Col>
-                        <p>Topic: {topicData.name}</p>
+                        <p><FormattedMessage id="collection.topic" />: {topicData.name}</p>
                     </Col>
                 </Row>
                 <hr></hr>
                 <Row>
                     <Col md={6}>
                         <div className="mt-2">
-                            <h3>Items</h3>
+                            <h3><FormattedMessage id="collection.items" /></h3>
                         </div>
                     </Col>
                     <Col md={6} className="text-right">
                         <Button variant="success" className="mt-2" onClick={() => setShowCreateModal(true)}>
-                            Create
+                            <FormattedMessage id="collection.create" />
                         </Button>
                     </Col>
                 </Row>
                 <Modal show={showCreateModal} onHide={() => setShowCreateModal(false)} size="lg">
                     <Modal.Header closeButton>
-                        <Modal.Title>Create Item</Modal.Title>
+                        <Modal.Title><FormattedMessage id="collection.createItem" /></Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
                         <CreateItem createItem={handleItemCreate} />
@@ -241,11 +263,11 @@ function Collection() {
                                 <thead>
                                     <tr>
                                         {collectionFields.map(field => (
-                                            (field.type === "string" || field.type === "datetime") && (
+                                            (field.type === "string" || field.type === "date") && (
                                                 <th key={field.id}>{field.name}</th>
                                             )
                                         ))}
-                                        <th>Creation Date</th>
+                                        <th><FormattedMessage id="collection.creationDate" /></th>
                                         <th></th>
                                         <th></th>
                                     </tr>
@@ -257,6 +279,22 @@ function Collection() {
                         </div>
                     </Col>
                 </Row>
+                <Modal show={showDeleteModal} onHide={() => setShowDeleteModal(false)}>
+                    <Modal.Header closeButton>
+                        <Modal.Title><FormattedMessage id="collection.confirmDeletion" /></Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <p><FormattedMessage id="collection.confirmDeleteMessage" /></p>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button variant="secondary" onClick={() => setShowDeleteModal(false)}>
+                            <FormattedMessage id="collection.cancel" />
+                        </Button>
+                        <Button variant="danger" onClick={confirmDeleteItem}>
+                            <FormattedMessage id="collection.delete" />
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
             </Container>
         </>
     );

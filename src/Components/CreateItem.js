@@ -4,6 +4,7 @@ import axios from 'axios';
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import Select from 'react-select';
+import { FormattedMessage } from 'react-intl';
 
 const baseUrl = 'https://alexav-001-site1.anytempurl.com';
 
@@ -97,7 +98,7 @@ const CreateItem = ({ createItem }) => {
         } else if (error.response && error.response.data) {
             setError(error.response.data);
         } else {
-            setError("An error occurred.");
+            setError(<FormattedMessage id="createItem.anErrorOccurred" />);
         }
     };
 
@@ -126,7 +127,7 @@ const CreateItem = ({ createItem }) => {
     const renderCollectionFields = () => {
         return collectionFields.map((field) => (
             <Form.Group key={field.id} as={Row} className="mt-2">
-                <Form.Label column sm="2">{field.name}</Form.Label>
+                <Form.Label column sm="2">{field.name} *</Form.Label>
                 <Col sm="10" className="mt-2">
                     {field.type === "string" && (
                         <Form.Control
@@ -134,6 +135,7 @@ const CreateItem = ({ createItem }) => {
                             value={fieldValues[field.id] || ""}
                             onChange={(e) => handleFieldValueChange(field.id, e.target.value)}
                             placeholder={`Enter ${field.name}`}
+                            required
                         />
                     )}
                     {field.type === "int" && (
@@ -142,6 +144,7 @@ const CreateItem = ({ createItem }) => {
                             value={fieldValues[field.id] || ""}
                             onChange={(e) => handleFieldValueChange(field.id, e.target.value)}
                             placeholder={`Enter ${field.name}`}
+                            required
                         />
                     )}
                     {field.type === "bool" && (
@@ -150,6 +153,7 @@ const CreateItem = ({ createItem }) => {
                             label={field.name}
                             checked={fieldValues[field.id] || false}
                             onChange={(e) => handleFieldValueChange(field.id, e.target.checked)}
+                            required
                         />
                     )}
                     {field.type === "double" && (
@@ -158,6 +162,7 @@ const CreateItem = ({ createItem }) => {
                             step="0.01"
                             value={fieldValues[field.id] || ""}
                             onChange={(e) => handleFieldValueChange(field.id, e.target.value)}
+                            required
                             placeholder={`Enter ${field.name}`}
                         />
                     )}
@@ -165,7 +170,8 @@ const CreateItem = ({ createItem }) => {
                         <Form.Control
                             type="date"
                             value={fieldValues[field.id] || ""}
-                            onChange={(e) => handleFieldValueChange(field.id, e.target.value)}
+                            onChange={(e) => handleFieldValueChange(field.id, e.target.value)} 
+                            required
                         />
                     )}
                 </Col>
@@ -189,13 +195,13 @@ const CreateItem = ({ createItem }) => {
             <Form onSubmit={handleSubmit}>
                 {error && <div className="alert alert-danger mt-4">{error}</div>}
                 <Form.Group as={Row} className="mt-2">
-                    <Form.Label column sm="2">Name *</Form.Label>
+                    <Form.Label column sm="2"><FormattedMessage id="createItem.nameLabel" /> *</Form.Label>
                     <Col sm="10">
-                        <Form.Control type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="Name" required />
+                        <Form.Control type="text" value={name} onChange={(e) => setName(e.target.value)} required />
                     </Col>
                 </Form.Group>
                 <Form.Group as={Row} className="mt-2">
-                    <Form.Label column sm="2">Tags</Form.Label>
+                    <Form.Label column sm="2"><FormattedMessage id="createItem.tagsLabel" /></Form.Label>
                     <Col sm="10" className="mt-2">
                         <Select
                             isMulti
@@ -204,7 +210,6 @@ const CreateItem = ({ createItem }) => {
                             onChange={(selectedOption) => setTags(selectedOption ? selectedOption.map(option => option.value) : [])}
                             onInputChange={handleTagInputChange}
                             onKeyDown={handleTagKeyDown}
-                            placeholder="Input tags..."
                             styles={customStyles}
                         />
                     </Col>
@@ -212,7 +217,7 @@ const CreateItem = ({ createItem }) => {
                 {renderCollectionFields()}
                 <Row className="mt-2">
                     <Col>
-                        <Button type="submit" variant="success">Create</Button>
+                        <Button type="submit" variant="success"><FormattedMessage id="createItem.createButton" /></Button>
                     </Col>
                 </Row>
             </Form>

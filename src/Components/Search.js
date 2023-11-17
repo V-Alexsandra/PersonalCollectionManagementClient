@@ -1,8 +1,8 @@
 import React from 'react';
-import { Container, Row, Col, Form, Button, Navbar, Nav, InputGroup } from "react-bootstrap";
+import { Container, Row, Col, Form, Button, InputGroup } from "react-bootstrap";
+import { FormattedMessage } from 'react-intl';
 
 function Search() {
-
     return (
         <>
             <Container>
@@ -15,10 +15,9 @@ function Search() {
                                 required
                             />
                             <Button variant="primary" className="btn-block">
-                                Search
+                                <FormattedMessage id="search.searchButton" />
                             </Button>
                         </InputGroup>
-
                     </Col>
                 </Row>
             </Container>

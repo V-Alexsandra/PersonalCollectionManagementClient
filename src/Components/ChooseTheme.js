@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Button, Container, Row, Col } from 'react-bootstrap';
+import { FormattedMessage } from 'react-intl';
 
 const baseUrl = 'https://alexav-001-site1.anytempurl.com';
 
@@ -42,7 +43,7 @@ function ChooseTheme() {
             updateThemeInIndexHtml(newTheme);
             return;
         }
-        
+
         const newTheme = currentTheme === 'light' ? 'dark' : 'light';
 
         try {
@@ -76,7 +77,7 @@ function ChooseTheme() {
         } else if (error.response && error.response.data) {
             setError(error.response.data);
         } else {
-            setError("An error occurred.");
+            setError("chooseTheme.anErrorOccurred");
         }
     };
 
@@ -85,7 +86,11 @@ function ChooseTheme() {
             <Row className="justify-content-center">
                 <Col className="text-right mt-3">
                     <Button variant="light" onClick={changeTheme}>
-                        {currentTheme === 'light' ? 'Dark' : 'Light'}
+                        {currentTheme === 'light' ? (
+                            <FormattedMessage id="chooseTheme.dark" />
+                        ) : (
+                            <FormattedMessage id="chooseTheme.light" />
+                        )}
                     </Button>
                 </Col>
             </Row>

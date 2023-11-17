@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Container, Row, Col, Button, Modal } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
+import { FormattedMessage } from 'react-intl';
 
 function LogOutBtn() {
   const navigate = useNavigate();
@@ -30,7 +31,7 @@ function LogOutBtn() {
         <Row className="justify-content-center">
           <Col className="text-right mt-3">
             <Button variant="danger" onClick={handleShowModal} className="btn-block">
-              Log Out
+              <FormattedMessage id="logout.logout" />
             </Button>
           </Col>
         </Row>
@@ -38,17 +39,17 @@ function LogOutBtn() {
 
       <Modal show={showModal} onHide={handleCloseModal}>
         <Modal.Header closeButton>
-          <Modal.Title>Confirm Logout</Modal.Title>
+          <Modal.Title><FormattedMessage id="logout.confirmTitle" /></Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <p>Are you sure you want to log out?</p>
+          <p><FormattedMessage id="logout.confirmMessage" /></p>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleCloseModal}>
-            Cancel
+            <FormattedMessage id="logout.cancel" />
           </Button>
           <Button variant="danger" onClick={handleConfirmLogout}>
-            Log Out
+            <FormattedMessage id="logout.logout" />
           </Button>
         </Modal.Footer>
       </Modal>

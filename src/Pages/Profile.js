@@ -9,6 +9,7 @@ import CreateCollection from "../Components/CreateCollection";
 import { toast } from 'react-toastify';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 const baseUrl = 'https://alexav-001-site1.anytempurl.com';
 
@@ -38,7 +39,7 @@ function Profile() {
             } else if (error.response && error.response.data) {
                 setError(error.response.data);
             } else {
-                setError("An error occurred.");
+                setError();
             }
         }
         getCollections();
@@ -52,7 +53,7 @@ function Profile() {
             if (error.response && error.response.data) {
                 setError(error.response.data);
             } else {
-                setError("An error occurred.");
+                setError(<FormattedMessage id="profile.anErrorOccurred" />);
             }
         }
     };
@@ -82,7 +83,7 @@ function Profile() {
             if (error.response && error.response.data) {
                 setError(error.response.data);
             } else {
-                setError("Failed to delete the collection. An error occurred.");
+                setError(<FormattedMessage id="profile.deleteErrorOccurred" />);
             }
         }
     };
@@ -92,7 +93,7 @@ function Profile() {
             setError("");
             const response = await axios.post(`${baseUrl}/api/Collection/create`, newCollectionData);
             setShowCreateModal(false);
-            toast.success('Collection created.', {
+            toast.success(<FormattedMessage id="profile.collectionCreated" />, {
                 onClose: () => {
                     window.location.reload();
                 }
@@ -101,7 +102,7 @@ function Profile() {
             if (error.response && error.response.data) {
                 setError(error.response.data);
             } else {
-                setError("Failed to create the collection. An error occurred.");
+                setError(<FormattedMessage id="profile.createErrorOccurred" />);
             }
         }
     };
@@ -132,9 +133,9 @@ function Profile() {
                     <Col md={12}>
                         {error && <div className="alert alert-danger mt-4">{error}</div>}
                         <div className="mt-4">
-                            <h3>User Information</h3>
-                            <p><b>Name:</b> {userData.userName}</p>
-                            <p><b>Email:</b> {userData.userEmail}</p>
+                            <h3><FormattedMessage id="profile.userInformation" /></h3>
+                            <p><b><FormattedMessage id="profile.name" />:</b> {userData.userName}</p>
+                            <p><b><FormattedMessage id="profile.email" />:</b> {userData.userEmail}</p>
                         </div>
                     </Col>
                 </Row>
@@ -142,12 +143,12 @@ function Profile() {
                 <Row>
                     <Col md={6}>
                         <div className="mt-2">
-                            <h3>Collections</h3>
+                            <h3><FormattedMessage id="profile.collections" /></h3>
                         </div>
                     </Col>
                     <Col md={6} className="text-right">
                         <Button variant="success" className="mt-2" onClick={() => setShowCreateModal(true)}>
-                            Create
+                            <FormattedMessage id="profile.create" />
                         </Button>
                     </Col>
                 </Row>
@@ -162,10 +163,10 @@ function Profile() {
                                 </Col>
                                 <Col md={6} className="text-right">
                                     <Button variant="primary" className="btn-block" style={{ marginRight: '10px' }}>
-                                        Edit
+                                        <FormattedMessage id="profile.edit" />
                                     </Button>
                                     <Button variant="danger" className="btn-block" onClick={() => handleDelete(collection.id)}>
-                                        Delete
+                                        <FormattedMessage id="profile.delete" />
                                     </Button>
                                 </Col>
                             </Row>
@@ -174,7 +175,7 @@ function Profile() {
                 </Row>
                 <Modal show={showCreateModal} onHide={() => setShowCreateModal(false)} size="lg">
                     <Modal.Header closeButton>
-                        <Modal.Title>Create Collection</Modal.Title>
+                        <Modal.Title><FormattedMessage id="profile.createCollection" /></Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
                         <CreateCollection createCollection={handleCreateCollection} />
@@ -182,17 +183,17 @@ function Profile() {
                 </Modal>
                 <Modal show={showDeleteModal} onHide={() => setShowDeleteModal(false)}>
                     <Modal.Header closeButton>
-                        <Modal.Title>Confirm Deletion</Modal.Title>
+                        <Modal.Title><FormattedMessage id="profile.confirmDeletion" /></Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                        <p>Are you sure you want to delete this collection?</p>
+                        <p><FormattedMessage id="profile.confirmDeleteMessage" /></p>
                     </Modal.Body>
                     <Modal.Footer>
                         <Button variant="secondary" onClick={() => setShowDeleteModal(false)}>
-                            Cancel
+                            <FormattedMessage id="profile.cancel" />
                         </Button>
                         <Button variant="danger" onClick={confirmDelete}>
-                            Delete
+                            <FormattedMessage id="profile.delete" />
                         </Button>
                     </Modal.Footer>
                 </Modal>

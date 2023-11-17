@@ -1,9 +1,9 @@
 import React from 'react';
-import { Container, Row, Col, Form, Button, Navbar, Nav, InputGroup } from "react-bootstrap";
+import { Container, Row, Col, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import { FormattedMessage } from 'react-intl';
 
 function ProfileBtn() {
-
     return (
         <>
             <Container>
@@ -11,7 +11,7 @@ function ProfileBtn() {
                     <Col className="mt-3">
                         <Link to="/profile">
                             <Button variant="primary" className="btn-block">
-                                Profile
+                                <FormattedMessage id="profileBtn.profile" />
                             </Button>
                         </Link>
                     </Col>

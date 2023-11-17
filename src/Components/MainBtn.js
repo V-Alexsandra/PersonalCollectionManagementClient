@@ -1,9 +1,9 @@
 import React from 'react';
-import { Container, Row, Col, Form, Button, Navbar, Nav, InputGroup } from "react-bootstrap";
+import { Container, Row, Col, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import { FormattedMessage } from 'react-intl';
 
 function MainBtn() {
-
     return (
         <>
             <Container>
@@ -11,7 +11,7 @@ function MainBtn() {
                     <Col className="text-right mt-3">
                         <Link to="/">
                             <Button variant="primary" className="btn-block">
-                                Main
+                                <FormattedMessage id="mainBtn.main" />
                             </Button>
                         </Link>
                     </Col>

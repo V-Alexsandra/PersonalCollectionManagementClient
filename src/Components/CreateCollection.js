@@ -3,6 +3,7 @@ import { Form, Row, Col, Button } from 'react-bootstrap';
 import axios from 'axios';
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
+import { FormattedMessage } from 'react-intl';
 
 const baseUrl = 'https://alexav-001-site1.anytempurl.com';
 
@@ -40,7 +41,7 @@ const CreateCollection = ({ createCollection }) => {
     const handleNameChange = (e) => {
         const { value } = e.target;
         if (value.includes('/') || value.includes('$') || value.includes('=')) {
-            setError("The symbols '/', '$', and '=' are not allowed in the name.");
+            setError(<FormattedMessage id="createCollection.errorSymbolsNotAllowed" />);
             return;
         }
         setError(null);
@@ -65,7 +66,7 @@ const CreateCollection = ({ createCollection }) => {
 
         const newCollection = {
             name,
-            description : editedDescription,
+            description: editedDescription,
             imageLink: "null",
             topic: selectedTopic,
             userId: currentUserId,
@@ -110,7 +111,7 @@ const CreateCollection = ({ createCollection }) => {
         setDescription(value);
         setEditedDescription(value);
     };
-   
+
     const handleSaveDescription = () => {
         setEditedDescription(description);
     };
@@ -132,13 +133,13 @@ const CreateCollection = ({ createCollection }) => {
             <Form onSubmit={handleSubmit}>
                 {error && <div className="alert alert-danger mt-4">{error}</div>}
                 <Form.Group as={Row} className="mt-2">
-                    <Form.Label column sm="2">Name *</Form.Label>
+                    <Form.Label column sm="2"><FormattedMessage id="createCollection.nameLabel" /> *</Form.Label>
                     <Col sm="10">
-                        <Form.Control type="text" value={name} onChange={handleNameChange} placeholder="Name" />
+                        <Form.Control type="text" value={name} onChange={handleNameChange}/>
                     </Col>
                 </Form.Group>
                 <Form.Group as={Row} className="mt-2">
-                    <Form.Label column sm="2">Description</Form.Label>
+                    <Form.Label column sm="2"><FormattedMessage id="createCollection.descriptionLabel" /> *</Form.Label>
                     <Col sm="10">
                         <ReactQuill
                             theme="snow"
@@ -149,10 +150,10 @@ const CreateCollection = ({ createCollection }) => {
                     </Col>
                 </Form.Group>
                 <Form.Group as={Row} className="mt-2">
-                    <Form.Label column sm="2">Topic *</Form.Label>
+                    <Form.Label column sm="2"><FormattedMessage id="createCollection.topicLabel" /> *</Form.Label>
                     <Col sm="10">
                         <Form.Control as="select" value={selectedTopic} onChange={(e) => setSelectedTopic(e.target.value)}>
-                            <option value="">Select a Topic</option>
+                            <option value="">{<FormattedMessage id="createCollection.selectTopic" />}</option>
                             {topicOptions.map((topic, index) => (
                                 <option key={index} value={topic.name}>{topic.name}</option>
                             ))}
@@ -161,45 +162,45 @@ const CreateCollection = ({ createCollection }) => {
                 </Form.Group>
                 {fields.map((field, index) => (
                     <Form.Group as={Row} key={index} className="mt-2">
-                        <Form.Label column sm="2">Field Type *</Form.Label>
+                        <Form.Label column sm="2"><FormattedMessage id="createCollection.fieldTypeLabel" /> *</Form.Label>
                         <Col sm="4">
                             <Form.Control as="select" value={field.type} onChange={(e) => {
                                 const newFields = [...fields];
                                 newFields[index].type = e.target.value;
                                 setFields(newFields);
                             }}>
-                                <option value="">Select a Type</option>
-                                <option value="int">Integer</option>
-                                <option value="string">String</option>
-                                <option value="bool">Boolean</option>
-                                <option value="double">Double</option>
-                                <option value="date">Date</option>
+                                <option value="">{<FormattedMessage id="createCollection.selectType" />}</option>
+                                <option value="int">{<FormattedMessage id="createCollection.fieldTypeInteger" />}</option>
+                                <option value="string">{<FormattedMessage id="createCollection.fieldTypeString" />}</option>
+                                <option value="bool">{<FormattedMessage id="createCollection.fieldTypeBoolean" />}</option>
+                                <option value="double">{<FormattedMessage id="createCollection.fieldTypeDouble" />}</option>
+                                <option value="date">{<FormattedMessage id="createCollection.fieldTypeDate" />}</option>
                             </Form.Control>
                         </Col>
-                        <Form.Label column sm="2">Field Name *</Form.Label>
+                        <Form.Label column sm="2"><FormattedMessage id="createCollection.fieldNameLabel" /> *</Form.Label>
                         <Col sm="4">
                             <Form.Control type="text" value={field.name} onChange={(e) => {
                                 const newFields = [...fields];
                                 newFields[index].name = e.target.value;
                                 setFields(newFields);
-                            }} placeholder="Field Name" />
+                            }}/>
                         </Col>
                     </Form.Group>
                 ))}
                 <Row className="mt-2">
                     <Col>
                         <Button type="button" onClick={handleAddField}>
-                            Add Field
+                            <FormattedMessage id="createCollection.addField" />
                         </Button>
                         <span style={{ marginLeft: '10px' }}></span>
                         <Button type="button" variant="danger" onClick={handleDeleteField}>
-                            Delete Field
+                            <FormattedMessage id="createCollection.deleteField" />
                         </Button>
                     </Col>
                 </Row>
                 <Row className="mt-2">
                     <Col>
-                        <Button type="submit" variant="success">Create</Button>
+                        <Button type="submit" variant="success"><FormattedMessage id="createCollection.createButton" /></Button>
                     </Col>
                 </Row>
             </Form>
