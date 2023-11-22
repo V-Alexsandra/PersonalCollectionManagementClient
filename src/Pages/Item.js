@@ -189,11 +189,7 @@ function Item() {
 
     useEffect(() => {
         try {
-            if (!token || !currentUserId) {
-                window.location.href = "/";
-            } else {
-                getItemData();
-            }
+            getItemData();
         } catch (error) {
             handleError(error);
         }
