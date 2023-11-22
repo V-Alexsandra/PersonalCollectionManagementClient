@@ -242,7 +242,7 @@ function Item() {
             .withAutomaticReconnect()
             .build();
 
-        connection.on("ReceiveLikes", (itemId, likeCount) => {
+        connection.on("ReceiveLikeCount", (itemId, likeCount) => {
             setLikes(likeCount);
         });
 
