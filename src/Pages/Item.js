@@ -243,7 +243,7 @@ function Item() {
             .build();
 
         connection.on("ReceiveLikeCount", (itemId, likeCount) => {
-            setLikes(likeCount);
+            getLikes();
         });
 
         try {
