@@ -11,7 +11,6 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { FormattedMessage, useIntl } from 'react-intl';
 import ChooseTheme from "../Components/ChooseTheme";
-import EditCollection from "../Components/EditCollection";
 
 const baseUrl = 'https://alexav-001-site1.anytempurl.com';
 
