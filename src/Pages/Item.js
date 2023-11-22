@@ -232,7 +232,7 @@ function Item() {
             await connection.start();
             setHubConnection(connection);
         } catch (error) {
-            console.error("Ошибка при подключении к хабу SignalR:", error);
+            handleError(error);
         }
     };
 
@@ -250,7 +250,7 @@ function Item() {
             await connection.start();
             setHubConnection(connection);
         } catch (error) {
-            console.error("Ошибка при подключении к хабу SignalR для лайков:", error);
+            handleError(error);
         }
     };
 

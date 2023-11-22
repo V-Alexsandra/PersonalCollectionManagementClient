@@ -30,23 +30,23 @@ const CreateItem = ({ createItem }) => {
 
     const fetchTagsAutocomplete = async () => {
         try {
-            const response = await axios.get(`${baseUrl}/api/Item/alltags`, {
+            const response = await axios.get(`${baseUrl}/api/Item/uniquetags`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                 }
             });
-    
+
             const options = response.data.map(tagObject => ({
                 label: tagObject.tag,
                 value: tagObject.tag,
             }));
             setAutocompleteOptions(options);
-    
+
             console.log("Autocomplete Options:", options);
         } catch (error) {
             handleError(error);
         }
-    };    
+    };
 
     const getCollectionFields = async () => {
         try {
@@ -64,14 +64,14 @@ const CreateItem = ({ createItem }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-    
+
         const itemFieldValues = Object.entries(fieldValues).map(([fieldId, value]) => ({
             collectionFieldId: fieldId,
             value,
         }));
-    
+
         const formattedTags = tags.map((tag) => (tag.startsWith("#") ? tag : `#${tag}`));
-    
+
         const newItem = {
             name,
             tags: formattedTags.map((tag) => ({ tag })),
@@ -79,7 +79,7 @@ const CreateItem = ({ createItem }) => {
             collectionId,
             itemFieldValues,
         };
-    
+
         try {
             createItem(newItem);
             setName("");
@@ -90,12 +90,10 @@ const CreateItem = ({ createItem }) => {
         } catch (error) {
             handleError(error);
         }
-    };    
+    };
 
     const handleError = (error) => {
-        if (error.response && error.response.status === 401) {
-            window.location.href = "/";
-        } else if (error.response && error.response.data) {
+        if (error.response && error.response.data) {
             setError(error.response.data);
         } else {
             setError(<FormattedMessage id="createItem.anErrorOccurred" />);
@@ -117,13 +115,28 @@ const CreateItem = ({ createItem }) => {
         setTags(tags.filter(tag => tag !== removedTag));
     };
 
-    const handleFieldValueChange = (fieldId, value) => {
-        setFieldValues(prevFieldValues => ({
-            ...prevFieldValues,
-            [fieldId]: value
-        }));
-    };    
+    const handleFieldValueChange = (fieldId, value, fieldType) => {
+        setFieldValues((prevFieldValues) => {
+            const newValue = fieldType === 'bool' ? String(value) : String(value);
+            return {
+                ...prevFieldValues,
+                [fieldId]: value ? newValue : 'false',
+            };
+        });
+    };
+    
+    useEffect(() => {
+        const initialFieldValues = {};
 
+        collectionFields.forEach((field) => {
+            if (field.type === 'bool') {
+                initialFieldValues[field.id] = 'false';
+            }
+        });
+
+        setFieldValues(initialFieldValues);
+    }, [collectionFields]);
+    
     const renderCollectionFields = () => {
         return collectionFields.map((field) => (
             <Form.Group key={field.id} as={Row} className="mt-2">
@@ -151,8 +164,8 @@ const CreateItem = ({ createItem }) => {
                         <Form.Check
                             type="checkbox"
                             label={field.name}
-                            checked={fieldValues[field.id] || false}
-                            onChange={(e) => handleFieldValueChange(field.id, e.target.checked)}
+                            checked={fieldValues[field.id] === 'true'}
+                            onChange={(e) => handleFieldValueChange(field.id, e.target.checked, field.type)}
                         />
                     )}
                     {field.type === "double" && (
@@ -169,7 +182,7 @@ const CreateItem = ({ createItem }) => {
                         <Form.Control
                             type="date"
                             value={fieldValues[field.id] || ""}
-                            onChange={(e) => handleFieldValueChange(field.id, e.target.value)} 
+                            onChange={(e) => handleFieldValueChange(field.id, e.target.value)}
                             required
                         />
                     )}
@@ -180,14 +193,14 @@ const CreateItem = ({ createItem }) => {
 
     const customStyles = {
         control: (provided, state) => ({
-          ...provided,
-          color: 'black',
+            ...provided,
+            color: 'black',
         }),
         option: (provided, state) => ({
-          ...provided,
-          color: 'black',
+            ...provided,
+            color: 'black',
         }),
-      };
+    };
 
     return (
         <>
