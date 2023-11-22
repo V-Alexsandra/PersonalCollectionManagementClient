@@ -196,9 +196,7 @@ function Item() {
     }, []);
 
     const handleError = (error) => {
-        if (error.response && error.response.status === 401) {
-            window.location.href = "/";
-        } else if (error.response && error.response.data) {
+        if (error.response && error.response.data) {
             setError(error.response.data);
         } else {
             setError(<FormattedMessage id="item.anErrorOccurred" />);
