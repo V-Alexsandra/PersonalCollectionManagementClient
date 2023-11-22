@@ -153,7 +153,6 @@ const CreateItem = ({ createItem }) => {
                             label={field.name}
                             checked={fieldValues[field.id] || false}
                             onChange={(e) => handleFieldValueChange(field.id, e.target.checked)}
-                            required
                         />
                     )}
                     {field.type === "double" && (

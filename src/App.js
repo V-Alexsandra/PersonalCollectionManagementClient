@@ -7,6 +7,7 @@ import Admin from './Pages/Admin';
 import Profile from './Pages/Profile';
 import Main from './Pages/Main';
 import Collection from './Pages/Collection';
+import Item from './Pages/Item';
 import { IntlProvider } from 'react-intl';
 import enMessages from '../src/shared/localization/en.json'
 import ruMessages from '../src/shared/localization/ru.json'
@@ -34,6 +35,7 @@ function App() {
             <Route path="/admin" element={<Admin />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/collection/:name" element={<Collection />} />
+            <Route path="/item/:name" element={<Item />} />
             <Route path="/" element={<Main />} />
           </Routes>
         </BrowserRouter>

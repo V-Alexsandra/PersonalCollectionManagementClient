@@ -36,6 +36,7 @@
     "collection.confirmDeletion": "Подтвердить удаление",
     "collection.confirmDeleteMessage": "Вы уверены, что хотите удалить этот элемент?",
     "collection.cancel": "Отмена",
+    "collection.anErrorOccurred": "Произошла ошибка.",
 
     "createItem.nameLabel": "Имя",
     "createItem.namePlaceholder": "Введите имя",
@@ -60,8 +61,7 @@
     "admin.deleteButton": "Удалить",
     "admin.changeRoleButton": "Изменить роль",
     "admin.confirmActionModalTitle": "Подтвердить действие",
-    "admin.confirmActionModalBody1": "Вы уверены, что хотите ",
-    "admin.confirmActionModalBody2": " выбранных пользователей?",
+    "admin.confirmActionModalBody1": "Вы уверены, что хотите продолжить?",
     "admin.confirmActionModalCancel": "Отмена",
     "admin.confirmActionModalConfirm": "Подтвердить",
     "admin.table.header.selectAll": "Выбрать все",
@@ -90,5 +90,37 @@
     "createCollection.fieldTypeDouble": "Дробное число",
     "createCollection.fieldTypeDate": "Дата",
 
-    "chooseLanguage.selectLanguage" : "Язык"
+    "chooseLanguage.selectLanguage" : "Язык",
+
+    "login.login" : "Авторизация",
+    "login.email" : "Электронная почта",
+    "login.password" : "Пароль",
+    "login.loginButton" : "Войти",
+    "login.registrationButton" : "Зарегестрироваться",
+    "login.anErrorOccurred": "Произошла ошибка.",
+
+    "registration.name" : "Имя",
+    "registration.registration" : "Регистрация",
+    "registration.email" : "Электронная почта",
+    "registration.password" : "Пароль",
+    "registration.repeatPassword" : "Повторите пароль",
+    "registration.registerButton" : "Зарегестрироваться",
+    "registration.loginButton" : "Войти",
+
+    "item.confirmDeletion": "Подтвердить удаление",
+    "item.confirmDeleteMessage": "Вы уверены, что хотите удалить этот элемент?",
+    "item.cancel": "Отмена",
+    "item.anErrorOccurred": "Произошла ошибка.",
+    "item.details": "Информмация об элементе",
+    "item.name": "Имя",
+    "item.creationDate": "Дата создания",
+    "item.tags" : "Теги",
+    "item.addComment" : "Добавить комментарий",
+    "item.submitComment" : "Отправить",
+    "item.comments" : "Комментарии:",
+    "item.likes" : "Лайки",
+    "item.like" : "Нравится",
+
+    "main.top": "Топ-5 Самых больших коллекций",
+    "main.tags" : "Облако тегов"
 }

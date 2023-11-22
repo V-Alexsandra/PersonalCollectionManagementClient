@@ -9,6 +9,8 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import CreateItem from '../Components/CreateItem';
 import { FormattedMessage } from 'react-intl';
+import ChooseTheme from "../Components/ChooseTheme";
+import { Link } from "react-router-dom";
 
 const baseUrl = 'https://alexav-001-site1.anytempurl.com';
 
@@ -18,10 +20,10 @@ function Collection() {
     const [topicData, setTopicData] = useState({});
     const [collectionItems, setCollectionItems] = useState([]);
     const [showCreateModal, setShowCreateModal] = useState(false);
-    const [collectionFields, setCollectionFields] = useState([]);
-    const [collectionFieldValues, setCollectionFieldValues] = useState([]);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [itemToDelete, setItemToDelete] = useState();
+    const [userRole, setUserRole] = useState();
+    const [canEditOrDelete, setCanEditOrDelete] = useState();
 
     const collectionId = localStorage.getItem('selectedCollectionId');
     const token = sessionStorage.getItem("token");
@@ -36,24 +38,9 @@ function Collection() {
             });
 
             setCollectionData(response.data);
+
             getCollectionTopic(response.data.topicId);
             getCollectionItems();
-            getCollectionFields();
-        } catch (error) {
-            handleError(error);
-        }
-    };
-
-
-    const getCollectionFields = async () => {
-        try {
-            const response = await axios.get(`${baseUrl}/api/Collection/collectionfields/${collectionId}`, {
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                }
-            });
-
-            setCollectionFields(response.data);
         } catch (error) {
             handleError(error);
         }
@@ -88,16 +75,26 @@ function Collection() {
     };
 
     useEffect(() => {
-        try {
-            if (!token || !currentUserId) {
-                window.location.href = "/";
-            } else {
-                getCollectionData();
+        const fetchData = async () => {
+            const role = await localStorage.getItem("role");
+            setUserRole(role);
+            
+            try {
+                await getCollectionData();
+
+                if (role === "Admin" || currentUserId === collectionData.userId) {
+                    setCanEditOrDelete(true);
+                }
+                console.log(canEditOrDelete);
+    
+            } catch (error) {
+                handleError(error);
             }
-        } catch (error) {
-            handleError(error);
-        }
-    }, [token, currentUserId]);
+        };
+    
+        fetchData();
+    
+    }, [token, currentUserId, collectionData.userId]);
 
     const handleError = (error) => {
         if (error.response && error.response.status === 401) {
@@ -105,7 +102,7 @@ function Collection() {
         } else if (error.response && error.response.data) {
             setError(error.response.data);
         } else {
-            setError("An error occurred.");
+            setError(<FormattedMessage id="collection.anErrorOccurred" />);
         }
     };
 
@@ -134,11 +131,10 @@ function Collection() {
         setShowDeleteModal(true);
     };
 
-    //
     const confirmDeleteItem = async () => {
         try {
             setError("");
-            await axios.delete(`${baseUrl}/api/Item/Delete/${itemToDelete}`);
+            await axios.delete(`${baseUrl}/api/Item/delete/${itemToDelete}`);
             getCollectionItems();
             setShowDeleteModal(false);
             toast.success('Item deleted.', {
@@ -151,51 +147,40 @@ function Collection() {
         }
     };
 
+    const formatDate = (dateString) => {
+        const options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' };
+        return new Date(dateString).toLocaleDateString(undefined, options);
+    };
+
+    const handleItemClick = (itemId) => {
+        localStorage.setItem('selectedItemId', itemId);
+    }
 
     const renderCollectionItems = () => {
-        const hasStringField = collectionFields.some((field) => field.type === "string");
-        const hasDateField = collectionFields.some((field) => field.type === "date");
-
-        const formatDate = (dateString) => {
-            const options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' };
-            return new Date(dateString).toLocaleDateString(undefined, options);
-        };
-
-        return collectionItems.map((item) => {
-            return (
-                <tr key={item.id}>
-                    {hasStringField &&
-                        collectionFields.map(
-                            (field) =>
-                                field.type === "string" && (
-                                    <td key={field.id}>
-                                        {collectionFieldValues.find((value) => value.collectionFieldId === field.id)?.value || ""}
-                                    </td>
-                                )
-                        )}
-                    {hasDateField &&
-                        collectionFields.map(
-                            (field) =>
-                                field.type === "date" && (
-                                    <td key={field.id}>
-                                        {formatDate(collectionFieldValues.find((value) => value.collectionFieldId === field.id)?.value)}
-                                    </td>
-                                )
-                        )}
-                    <td>{formatDate(item.creationDate)}</td>
-                    <td>
-                        <Button variant="primary" size="sm" onClick={() => handleEditItem(item.id)}>
-                            <FormattedMessage id="collection.edit" />
-                        </Button>
-                    </td>
-                    <td>
-                        <Button variant="danger" size="sm" onClick={() => handleDeleteItem(item.id)}>
-                            <FormattedMessage id="collection.delete" />
-                        </Button>
-                    </td>
-                </tr>
-            );
-        });
+        return collectionItems.map((item) => (
+            <tr key={item.id}>
+                <td>
+                    <Link to={`/item/${item.name}`} onClick={() => handleItemClick(item.id)}>
+                        {item.name}
+                    </Link>
+                </td>
+                <td>{formatDate(item.creationDate)}</td>
+                {canEditOrDelete && (
+                    <>
+                        <td>
+                            <Button variant="primary" size="sm" onClick={() => handleEditItem(item.id)}>
+                                <FormattedMessage id="collection.edit" />
+                            </Button>
+                        </td>
+                        <td>
+                            <Button variant="danger" size="sm" onClick={() => handleDeleteItem(item.id)}>
+                                <FormattedMessage id="collection.delete" />
+                            </Button>
+                        </td>
+                    </>
+                )}
+            </tr>
+        ));
     };
 
     return (
@@ -209,8 +194,11 @@ function Collection() {
                     <Col md={10} sm={12}>
                         <Search />
                     </Col>
-                    <Col md={2} sm={12}>
+                    <Col md={1} sm={12}>
                         <ProfileBtn />
+                    </Col>
+                    <Col md={1} sm={12} className="btn-block">
+                        <ChooseTheme />
                     </Col>
                 </Row>
                 {error && <div className="alert alert-danger mt-4">{error}</div>}
@@ -235,18 +223,22 @@ function Collection() {
                         <p><FormattedMessage id="collection.topic" />: {topicData.name}</p>
                     </Col>
                 </Row>
-                <hr></hr>
+            </Container>
+            <hr></hr>
+            <Container>
                 <Row>
                     <Col md={6}>
                         <div className="mt-2">
                             <h3><FormattedMessage id="collection.items" /></h3>
                         </div>
                     </Col>
-                    <Col md={6} className="text-right">
-                        <Button variant="success" className="mt-2" onClick={() => setShowCreateModal(true)}>
-                            <FormattedMessage id="collection.create" />
-                        </Button>
-                    </Col>
+                    {canEditOrDelete && (
+                        <Col md={6} className="text-right">
+                            <Button variant="success" className="mt-2" onClick={() => setShowCreateModal(true)}>
+                                <FormattedMessage id="collection.create" />
+                            </Button>
+                        </Col>
+                    )}
                 </Row>
                 <Modal show={showCreateModal} onHide={() => setShowCreateModal(false)} size="lg">
                     <Modal.Header closeButton>
@@ -262,14 +254,14 @@ function Collection() {
                             <Table bordered hover>
                                 <thead>
                                     <tr>
-                                        {collectionFields.map(field => (
-                                            (field.type === "string" || field.type === "date") && (
-                                                <th key={field.id}>{field.name}</th>
-                                            )
-                                        ))}
+                                        <th><FormattedMessage id="collection.name" /></th>
                                         <th><FormattedMessage id="collection.creationDate" /></th>
-                                        <th></th>
-                                        <th></th>
+                                        {canEditOrDelete && (
+                                            <>
+                                                <th></th>
+                                                <th></th>
+                                            </>
+                                        )}
                                     </tr>
                                 </thead>
                                 <tbody>

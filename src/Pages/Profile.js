@@ -10,6 +10,8 @@ import { toast } from 'react-toastify';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { FormattedMessage, useIntl } from 'react-intl';
+import ChooseTheme from "../Components/ChooseTheme";
+import EditCollection from "../Components/EditCollection";
 
 const baseUrl = 'https://alexav-001-site1.anytempurl.com';
 
@@ -20,6 +22,7 @@ function Profile() {
     const [showCreateModal, setShowCreateModal] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [collectionToDelete, setCollectionToDelete] = useState(null);
+    const [userRole, setUserRole] = useState();
 
     const token = sessionStorage.getItem("token");
     const currentUserId = sessionStorage.getItem("id");
@@ -59,6 +62,7 @@ function Profile() {
     };
 
     useEffect(() => {
+        setUserRole(sessionStorage.getItem("role"));
         if (!token || !currentUserId) {
             window.location.href = "/";
             return;
@@ -122,11 +126,14 @@ function Profile() {
                     <Col md={2} sm={12}>
                         <MainBtn />
                     </Col>
-                    <Col md={8} sm={12}>
+                    <Col md={7} sm={12}>
                         <Search />
                     </Col>
                     <Col md={2} sm={12}>
                         <LogOutBtn />
+                    </Col>
+                    <Col md={1} sm={12} className="btn-block">
+                        <ChooseTheme />
                     </Col>
                 </Row>
                 <Row>

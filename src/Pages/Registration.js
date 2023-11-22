@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { toast } from 'react-toastify';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { FormattedMessage } from 'react-intl';
 
 const baseUrl = 'https://alexav-001-site1.anytempurl.com';
 
@@ -54,11 +55,11 @@ function Registration() {
             />
             <Row className="justify-content-center">
                 <Col md={6}>
-                    <h3 className="text-center mt-4">Registration</h3>
+                    <h3 className="text-center mt-4"><FormattedMessage id="registration.registration" /></h3>
                     <Form onSubmit={handleSubmit}>
                         {error && <div className="alert alert-danger mt-4">{error}</div>}
                         <Form.Group>
-                            <Form.Label>Name</Form.Label>
+                            <Form.Label><FormattedMessage id="registration.name" /></Form.Label>
                             <Form.Control
                                 type="text"
                                 name="name"
@@ -68,7 +69,7 @@ function Registration() {
                             />
                         </Form.Group>
                         <Form.Group className="mt-2">
-                            <Form.Label>Email</Form.Label>
+                            <Form.Label><FormattedMessage id="registration.email" /></Form.Label>
                             <Form.Control
                                 type="email"
                                 name="email"
@@ -80,7 +81,7 @@ function Registration() {
                             />
                         </Form.Group>
                         <Form.Group className="mt-2">
-                            <Form.Label>Password</Form.Label>
+                            <Form.Label><FormattedMessage id="registration.password" /></Form.Label>
                             <Form.Control
                                 type="password"
                                 name="password"
@@ -91,7 +92,7 @@ function Registration() {
                             />
                         </Form.Group>
                         <Form.Group className="mt-2">
-                            <Form.Label>Repeat Password</Form.Label>
+                            <Form.Label><FormattedMessage id="registration.repeatPassword" /></Form.Label>
                             <Form.Control
                                 type="password"
                                 name="repeatPassword"
@@ -104,10 +105,12 @@ function Registration() {
                         <Row>
                             <Form.Group className="d-flex justify-content-between">
                                 <Button type="submit" variant="primary" className="btn-block">
-                                    Register
+                                <FormattedMessage id="registration.registerButton" />
                                 </Button>
                                 <Link to="/login">
-                                    <Button variant="secondary" className="btn-block">LogIn</Button>
+                                    <Button variant="secondary" className="btn-block">
+                                    <FormattedMessage id="registration.loginButton" />
+                                    </Button>
                                 </Link>
                             </Form.Group>
                         </Row>

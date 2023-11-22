@@ -6,21 +6,85 @@ import { Link } from "react-router-dom";
 import ChooseTheme from "../Components/ChooseTheme";
 import { FormattedMessage } from 'react-intl';
 import ChooseLanguage from "../Components/ChooseLanguage";
+import { TagCloud } from 'react-tagcloud';
+import axios from "axios";
+
+const baseUrl = 'https://alexav-001-site1.anytempurl.com';
 
 function Main() {
+    const [error, setError] = useState(null);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [tags, setTags] = useState([]);
+    const [largestCollections, setLargestCollections] = useState([]);
+    const [userRole, setUserRole] = useState();
 
     const token = sessionStorage.getItem("token");
     const currentUserId = sessionStorage.getItem("id");
 
+    const getTags = async () => {
+        try {
+            const response = await axios.get(`${baseUrl}/api/Item/uniquetags`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                }
+            });
+
+            setTags(response.data);
+        } catch (error) {
+            handleError(error);
+        }
+    }
+
+    const handleError = (error) => {
+        if (error.response && error.response.status === 401) {
+            window.location.href = "/";
+        } else if (error.response && error.response.data) {
+            setError(error.response.data);
+        } else {
+            setError(<FormattedMessage id="item.anErrorOccurred" />);
+        }
+    };
+
+    const getLargestCollections = async () => {
+        try {
+            const response = await axios.get(`${baseUrl}/api/Collection/largest`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                }
+            });
+
+            setLargestCollections(response.data);
+        } catch (error) {
+            handleError(error);
+        }
+    }
+
+    const getData = () => {
+        getTags();
+        getLargestCollections();
+    }
+
     useEffect(() => {
-        if (!token || !currentUserId) {
-            setIsLoggedIn(false);
-        }
-        else {
-            setIsLoggedIn(true);
-        }
+        const fetchData = async () => {
+            const role = localStorage.getItem("role");
+            setUserRole(role);
+    
+            if (!token || !currentUserId) {
+                setIsLoggedIn(false);
+                getData();
+            } else {
+                setIsLoggedIn(true);
+                getData();
+            }
+        };
+    
+        fetchData();
     }, [token, currentUserId]);
+
+    const handleCollectionClick = (collectionId) => {
+        localStorage.setItem('selectedCollectionId', collectionId);
+    };
+
 
     return (
         <>
@@ -30,13 +94,22 @@ function Main() {
                         <Search />
                     </Col>
                     {!isLoggedIn ? (
+
                         <Col md={2} sm={12}>
                             <Link to="/login">
-                                <Button type="submit" variant="success" className="btn-block mt-3">
-                                    <FormattedMessage id="main.logIn" />
-                                </Button>
+                                <Container>
+                                    <Row className="justify-content-center">
+                                        <Col className="mt-3">
+                                            <Button type="submit" variant="success" className="btn-block">
+                                                <FormattedMessage id="main.logIn" />
+                                            </Button>
+                                        </Col>
+                                    </Row>
+                                </Container>
                             </Link>
-                        </Col>) :
+                        </Col>
+
+                    ) :
                         <Col md={2} sm={12}>
                             {!isLoggedIn ? (
                                 <Link to="/profile">
@@ -53,6 +126,31 @@ function Main() {
                     </Col>
                     <Col md={1} sm={12} className="btn-block">
                         <ChooseTheme />
+                    </Col>
+                </Row>
+                {error && <div className="alert alert-danger mt-4">{error}</div>}
+                <Row>
+                    <Col className="mt-4">
+                        <h5><FormattedMessage id="main.top" /></h5>
+                        <ul>
+                            {largestCollections && largestCollections.map(collection => (
+                                <li key={collection.id}>
+                                    <Link to={`/collection/${collection.name}`} onClick={() => handleCollectionClick(collection.id)}>
+                                        <p>{collection.name}</p>
+                                    </Link>
+                                </li>
+                            ))}
+                        </ul>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col className="mt-4">
+                        <h5><FormattedMessage id="main.tags" /></h5>
+                        <TagCloud
+                            tags={tags ? tags.map(tag => ({ value: tag.tag, count: 1 })) : []}
+                            minSize={12}
+                            maxSize={25}
+                        />
                     </Col>
                 </Row>
             </Container>
