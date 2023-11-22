@@ -14,27 +14,29 @@ function ChooseTheme() {
 
     useEffect(() => {
         const fetchData = async () => {
-            try {
-                const response = await axios.get(
-                    `${baseUrl}/api/User/gettheme`,
-                    {
-                        headers: {
-                            'Authorization': `Bearer ${token}`,
-                            'Content-Type': 'application/json',
-                        },
-                        params: { id: currentUserId },
-                    }
-                );
-
-                setCurrentTheme(response.data);
-                updateThemeInIndexHtml(response.data);
-            } catch (error) {
-                handleError(error);
+            if (token) {
+                try {
+                    const response = await axios.get(
+                        `${baseUrl}/api/User/gettheme`,
+                        {
+                            headers: {
+                                'Authorization': `Bearer ${token}`,
+                                'Content-Type': 'application/json',
+                            },
+                            params: { id: currentUserId },
+                        }
+                    );
+    
+                    setCurrentTheme(response.data);
+                    updateThemeInIndexHtml(response.data);
+                } catch (error) {
+                    handleError(error);
+                }
             }
         };
-
+    
         fetchData();
-    }, [token, currentUserId]);
+    }, [token, currentUserId]);    
 
     const changeTheme = async () => {
         if (!token) {
