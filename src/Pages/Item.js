@@ -10,6 +10,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { FormattedMessage } from 'react-intl';
 import ChooseTheme from "../Components/ChooseTheme";
 import { TagCloud } from 'react-tagcloud';
+import { HubConnectionBuilder } from '@microsoft/signalr';
 
 const baseUrl = 'https://alexav-001-site1.anytempurl.com';
 
@@ -23,6 +24,7 @@ function Item() {
     const [newComment, setNewComment] = useState("");
     const [likes, setLikes] = useState();
     const [userData, setUserData] = useState({});
+    const [hubConnection, setHubConnection] = useState(null);
 
     const collectionId = localStorage.getItem('selectedCollectionId');
     const itemId = localStorage.getItem('selectedItemId');
@@ -216,10 +218,48 @@ function Item() {
         }
     }
 
+    const connectToCommentHub = async () => {
+        const connection = new HubConnectionBuilder()
+            .withUrl(`${baseUrl}/commentHub`)
+            .withAutomaticReconnect()
+            .build();
+
+        connection.on("ReceiveComments", (itemId) => {
+            getComments();
+        });
+
+        try {
+            await connection.start();
+            setHubConnection(connection);
+        } catch (error) {
+            console.error("Ошибка при подключении к хабу SignalR:", error);
+        }
+    };
+
+    const connectToLikeHub = async () => {
+        const connection = new HubConnectionBuilder()
+            .withUrl(`${baseUrl}/likeHub`)
+            .withAutomaticReconnect()
+            .build();
+
+        connection.on("ReceiveLikes", (itemId, likeCount) => {
+            setLikes(likeCount);
+        });
+
+        try {
+            await connection.start();
+            setHubConnection(connection);
+        } catch (error) {
+            console.error("Ошибка при подключении к хабу SignalR для лайков:", error);
+        }
+    };
+
     useEffect(() => {
         const fetchData = async () => {
             try {
                 await getItemData();
+                await connectToCommentHub();
+                await connectToLikeHub();
             } catch (error) {
                 handleError(error);
             }
