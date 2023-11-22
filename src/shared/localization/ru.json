@@ -106,6 +106,7 @@
     "registration.repeatPassword" : "Повторите пароль",
     "registration.registerButton" : "Зарегестрироваться",
     "registration.loginButton" : "Войти",
+    "registration.userregister" : "Регистрация прошла успешно",
 
     "item.confirmDeletion": "Подтвердить удаление",
     "item.confirmDeleteMessage": "Вы уверены, что хотите удалить этот элемент?",
@@ -120,6 +121,8 @@
     "item.comments" : "Комментарии:",
     "item.likes" : "Лайки",
     "item.like" : "Нравится",
+    "item.loginlike" : "Вам нужно войти в аккаунт, чтобы поставить лайк.",
+    "item.logincomment" : "Вам нужно войти в аккаунт, чтобы оставить комментарий.",
 
     "main.top": "Топ-5 Самых больших коллекций",
     "main.tags" : "Облако тегов"

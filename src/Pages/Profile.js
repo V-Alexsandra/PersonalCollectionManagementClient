@@ -49,7 +49,12 @@ function Profile() {
 
     const getCollections = async () => {
         try {
-            const response = await axios.get(`${baseUrl}/api/Collection/userscollections/${currentUserId}`);
+            const response = await axios.get(`${baseUrl}/api/Collection/userscollections/${currentUserId}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                }
+            });
+
             setCollections(response.data);
         } catch (error) {
             if (error.response && error.response.data) {
@@ -79,7 +84,12 @@ function Profile() {
     const confirmDelete = async () => {
         try {
             setError("");
-            await axios.delete(`${baseUrl}/api/Collection/Delete/${collectionToDelete}/?userId=${currentUserId}`);
+            await axios.delete(`${baseUrl}/api/Collection/Delete/${collectionToDelete}/?userId=${currentUserId}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                }
+            });
+
             setCollections(collections.filter(collection => collection.id !== collectionToDelete));
             setShowDeleteModal(false);
         } catch (error) {
@@ -94,7 +104,11 @@ function Profile() {
     const handleCreateCollection = async (newCollectionData) => {
         try {
             setError("");
-            const response = await axios.post(`${baseUrl}/api/Collection/create`, newCollectionData);
+            const response = await axios.post(`${baseUrl}/api/Collection/create`, newCollectionData, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                }
+            });
             setShowCreateModal(false);
             toast.success(<FormattedMessage id="profile.collectionCreated" />, {
                 onClose: () => {

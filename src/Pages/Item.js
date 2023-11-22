@@ -28,6 +28,7 @@ function Item() {
     const itemId = localStorage.getItem('selectedItemId');
     const token = sessionStorage.getItem("token");
     const currentUserId = sessionStorage.getItem("id");
+    const isUserAuthenticated = !!token;
 
     const getItemData = async () => {
         try {
@@ -95,22 +96,6 @@ function Item() {
         }
     }
 
-    const getComments = async () => {
-        try {
-            const response = await axios.get(`${baseUrl}/api/Comment/getcomments/${itemId}`, {
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                }
-            });
-
-            setComments(response.data);
-
-            await Promise.all(response.data.map(comment => getUserData(comment.userId)));
-        } catch (error) {
-            handleError(error);
-        }
-    }
-
     const getUserData = async (id) => {
         try {
             const response = await axios.get(`${baseUrl}/api/User/profile/${id}`, {
@@ -119,7 +104,43 @@ function Item() {
                 }
             });
 
-            setUserData(response.data);
+            const userData = response.data;
+
+            setUserData((prevUserData) => ({
+                ...prevUserData,
+                [userData.userId]: userData,
+            }));
+
+            return userData;
+        } catch (error) {
+            return null;
+        }
+    };
+
+    const getComments = async () => {
+        try {
+            const response = await axios.get(`${baseUrl}/api/Comment/getcomments/${itemId}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                }
+            });
+
+            const commentsData = response.data;
+
+            const userDataPromises = commentsData.map(async (comment) => {
+                const userData = await getUserData(comment.userId);
+                return userData || {};
+            });
+
+            const userDataArray = await Promise.all(userDataPromises);
+
+            const userDataDictionary = commentsData.reduce((acc, comment, index) => {
+                acc[comment.userId] = userDataArray[index];
+                return acc;
+            }, {});
+
+            setComments(commentsData);
+            setUserData(userDataDictionary);
         } catch (error) {
             handleError(error);
         }
@@ -130,27 +151,31 @@ function Item() {
     };
 
     const submitComment = async () => {
-        try {
-            const commentData = {
-                text: newComment,
-                itemId: itemId,
-                userId: currentUserId
-            };
+        if (isUserAuthenticated) {
+            try {
+                const commentData = {
+                    text: newComment,
+                    itemId: itemId,
+                    userId: currentUserId
+                };
 
-            await axios.post(
-                `${baseUrl}/api/Comment/create`,
-                commentData,
-                {
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                    },
-                }
-            );
+                await axios.post(
+                    `${baseUrl}/api/Comment/create`,
+                    commentData,
+                    {
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                        },
+                    }
+                );
 
-            setNewComment("");
-            getComments();
-        } catch (error) {
-            handleError(error);
+                setNewComment("");
+                getComments();
+            } catch (error) {
+                handleError(error);
+            }
+        } else {
+            toast.error(<FormattedMessage id="item.logincomment" />);
         }
     };
 
@@ -169,30 +194,38 @@ function Item() {
     }
 
     const handleLike = async () => {
-        try {
-            const data = {
-                itemId: itemId,
-                userId: currentUserId
-            };
+        if (isUserAuthenticated) {
+            try {
+                const data = {
+                    itemId: itemId,
+                    userId: currentUserId
+                };
 
-            await axios.post(`${baseUrl}/api/Like/Like`, data, {
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                }
-            });
+                await axios.post(`${baseUrl}/api/Like/Like`, data, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                    }
+                });
 
-            getLikes();
-        } catch (error) {
-            handleError(error);
+                getLikes();
+            } catch (error) {
+                handleError(error);
+            }
+        } else {
+            toast.error(<FormattedMessage id="item.loginlike" />);
         }
     }
 
     useEffect(() => {
-        try {
-            getItemData();
-        } catch (error) {
-            handleError(error);
-        }
+        const fetchData = async () => {
+            try {
+                await getItemData();
+            } catch (error) {
+                handleError(error);
+            }
+        };
+
+        fetchData();
     }, []);
 
     const handleError = (error) => {
@@ -319,7 +352,7 @@ function Item() {
                             <h5 className="mt-4"><FormattedMessage id="item.comments" /></h5>
                             {comments.map(comment => (
                                 <div key={comment.id} className="mt-2">
-                                    <p><b>User:</b> {userData[comment.userId] && userData[comment.userId].name}</p>
+                                    <p><b>User:</b> {userData[comment.userId] ? userData[comment.userId].userName : 'Unknown User'}</p>
                                     <p>{comment.text}</p>
                                     <p>{formatDate(comment.date)}</p>
                                     <hr></hr>

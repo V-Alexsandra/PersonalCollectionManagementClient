@@ -33,7 +33,7 @@ function Registration() {
                 formData
             );
             
-            toast.success('Collection created.', {
+            toast.success(<FormattedMessage id="registration.userregister" />, {
                 onClose: () => {
                     navigate("/login");
                 }

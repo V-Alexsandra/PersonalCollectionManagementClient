@@ -14,6 +14,7 @@
     "profile.anErrorOccurred": "An error occurred.",
     "profile.profile.deleteErrorOccurred": "Failed to delete the collection. An error occurred.",
     "profile.profile.cereteErrorOccurred": "Failed to create the collection. An error occurred.",
+    "profile.cancel" : "Cancel",
 
     "chooseTheme.dark": "Dark",
     "chooseTheme.light": "Light",
@@ -106,6 +107,7 @@
     "registration.repeatPassword" : "Repeat Password",
     "registration.registerButton" : "Register",
     "registration.loginButton" : "LogIn",
+    "registration.userregister" : "Registration was successful",
 
     "item.confirmDeletion": "Confirm Deletion",
     "item.confirmDeleteMessage": "Are you sure you want to delete this item?",
@@ -120,6 +122,8 @@
     "item.comments" : "Comments:",
     "item.likes" : "Likes",
     "item.like" : "Like",
+    "item.loginlike" : "You need to log in to like the item.",
+    "item.logincomment" : "You need to log in to leave a comment.",
 
     "main.top" : "Top-5 The largest collections",
     "main.tags" : "Tags Cloud"

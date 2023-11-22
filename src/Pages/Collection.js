@@ -78,7 +78,7 @@ function Collection() {
         const fetchData = async () => {
             const role = await localStorage.getItem("role");
             setUserRole(role);
-            
+
             try {
                 await getCollectionData();
 
@@ -86,20 +86,18 @@ function Collection() {
                     setCanEditOrDelete(true);
                 }
                 console.log(canEditOrDelete);
-    
+
             } catch (error) {
                 handleError(error);
             }
         };
-    
+
         fetchData();
-    
+
     }, [token, currentUserId, collectionData.userId]);
 
     const handleError = (error) => {
-        if (error.response && error.response.status === 401) {
-            window.location.href = "/";
-        } else if (error.response && error.response.data) {
+        if (error.response && error.response.data) {
             setError(error.response.data);
         } else {
             setError(<FormattedMessage id="collection.anErrorOccurred" />);
@@ -110,7 +108,11 @@ function Collection() {
         try {
             newItemData.collectionId = collectionId;
             setError("");
-            const response = await axios.post(`${baseUrl}/api/Item/create`, newItemData);
+            const response = await axios.post(`${baseUrl}/api/Item/create`, newItemData, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                }
+            });
             setShowCreateModal(false);
             toast.success('Item created.', {
                 onClose: () => {
@@ -134,7 +136,11 @@ function Collection() {
     const confirmDeleteItem = async () => {
         try {
             setError("");
-            await axios.delete(`${baseUrl}/api/Item/delete/${itemToDelete}`);
+            await axios.delete(`${baseUrl}/api/Item/delete/${itemToDelete}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                }
+            });
             getCollectionItems();
             setShowDeleteModal(false);
             toast.success('Item deleted.', {
