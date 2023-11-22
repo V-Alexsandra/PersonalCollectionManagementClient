@@ -193,7 +193,7 @@ function Item() {
         } catch (error) {
             handleError(error);
         }
-    }, [token, currentUserId]);
+    }, []);
 
     const handleError = (error) => {
         if (error.response && error.response.status === 401) {
