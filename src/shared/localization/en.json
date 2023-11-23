@@ -131,5 +131,7 @@
     "main.lastAddedItems" : "Last added items",
     "main.item" : "Item: ",
     "main.collection" : "Collection: ",
-    "main.author" : "Author: "
+    "main.author" : "Author: ",
+
+    "tagitems.tagitems" : "Items: "
  }

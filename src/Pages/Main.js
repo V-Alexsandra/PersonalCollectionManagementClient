@@ -8,6 +8,7 @@ import { FormattedMessage } from 'react-intl';
 import ChooseLanguage from "../Components/ChooseLanguage";
 import { TagCloud } from 'react-tagcloud';
 import axios from "axios";
+import { useNavigate } from 'react-router-dom';
 
 const baseUrl = 'https://alexav-001-site1.anytempurl.com';
 
@@ -101,6 +102,13 @@ function Main() {
         localStorage.setItem('selectedCollectionId', collectionId);
     };
 
+    const navigate = useNavigate();
+
+    const handleTagClick = (tag) => {
+        console.log(tag);
+        localStorage.setItem('tag', tag);
+        navigate('/tagitems');
+    }
 
     return (
         <>
@@ -166,6 +174,7 @@ function Main() {
                             tags={tags ? tags.map(tag => ({ value: tag.tag, count: 1 })) : []}
                             minSize={12}
                             maxSize={25}
+                            onClick={(tag) => handleTagClick(tag.value)}
                         />
                     </Col>
                 </Row>

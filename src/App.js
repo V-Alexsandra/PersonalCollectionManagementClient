@@ -12,6 +12,7 @@ import { IntlProvider } from 'react-intl';
 import enMessages from '../src/shared/localization/en.json'
 import ruMessages from '../src/shared/localization/ru.json'
 import GlobalContext from './contexts/globalContext';
+import TagItems from './Pages/TagItems';
 
 function App() {
   const [locale, setLocale] = useState(localStorage.getItem("locale") || "EN");
@@ -37,6 +38,7 @@ function App() {
             <Route path="/collection/:name" element={<Collection />} />
             <Route path="/item/:name" element={<Item />} />
             <Route path="/" element={<Main />} />
+            <Route path='/tagitems' element = {<TagItems />}/>
           </Routes>
         </BrowserRouter>
       </IntlProvider>

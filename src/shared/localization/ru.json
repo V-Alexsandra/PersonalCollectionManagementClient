@@ -130,5 +130,7 @@
     "main.lastAddedItems" : "Последние добавленные элементы",
     "main.item" : "Элемент: ",
     "main.collection" : "Коллекция: ",
-    "main.author" : "Автор: "
+    "main.author" : "Автор: ",
+
+    "tagitems.tagitems" : "Элементы: "
 }
