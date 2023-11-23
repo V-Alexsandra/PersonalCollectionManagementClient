@@ -91,7 +91,7 @@ const CreateCollection = ({ createCollection }) => {
         } else if (error.response && error.response.data) {
             setError(error.response.data);
         } else {
-            setError("An error occurred.");
+            setError(<FormattedMessage id="reateCollection.anErrorOccurred" />);
         }
     };
 

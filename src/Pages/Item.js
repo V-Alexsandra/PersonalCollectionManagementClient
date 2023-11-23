@@ -276,14 +276,6 @@ function Item() {
         }
     };
 
-    const handleEditItem = () => {
-        // Handle edit logic
-    }
-
-    const handleDeleteItem = () => {
-        setShowDeleteModal(true);
-    };
-
     const confirmDeleteItem = async () => {
         try {
             setError("");
@@ -401,23 +393,6 @@ function Item() {
                         </Col>
                     </Row>
                 </div>
-
-                <Modal show={showDeleteModal} onHide={() => setShowDeleteModal(false)}>
-                    <Modal.Header closeButton>
-                        <Modal.Title><FormattedMessage id="item.confirmDeletion" /></Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                        <p><FormattedMessage id="item.confirmDeleteMessage" /></p>
-                    </Modal.Body>
-                    <Modal.Footer>
-                        <Button variant="secondary" onClick={() => setShowDeleteModal(false)}>
-                            <FormattedMessage id="item.cancel" />
-                        </Button>
-                        <Button variant="danger" onClick={confirmDeleteItem}>
-                            <FormattedMessage id="item.delete" />
-                        </Button>
-                    </Modal.Footer>
-                </Modal>
             </Container>
         </>
     );

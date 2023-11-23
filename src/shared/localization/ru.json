@@ -89,6 +89,7 @@
     "createCollection.fieldTypeBoolean": "Булево значение",
     "createCollection.fieldTypeDouble": "Дробное число",
     "createCollection.fieldTypeDate": "Дата",
+    "createCollection.anErrorOccurred": "Произошла ошибка.",
 
     "chooseLanguage.selectLanguage" : "Язык",
 
@@ -125,5 +126,9 @@
     "item.logincomment" : "Вам нужно войти в аккаунт, чтобы оставить комментарий.",
 
     "main.top": "Топ-5 Самых больших коллекций",
-    "main.tags" : "Облако тегов"
+    "main.tags" : "Облако тегов",
+    "main.lastAddedItems" : "Последние добавленные элементы",
+    "main.item" : "Элемент: ",
+    "main.collection" : "Коллекция: ",
+    "main.author" : "Автор: "
 }

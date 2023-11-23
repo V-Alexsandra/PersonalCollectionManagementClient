@@ -90,6 +90,7 @@
     "createCollection.fieldTypeBoolean": "Boolean",
     "createCollection.fieldTypeDouble": "Double",
     "createCollection.fieldTypeDate": "Date",
+    "createCollection.anErrorOccurred": "An error occurred.",
 
     "chooseLanguage.selectLanguage" : "Language",
 
@@ -126,5 +127,9 @@
     "item.logincomment" : "You need to log in to leave a comment.",
 
     "main.top" : "Top-5 The largest collections",
-    "main.tags" : "Tags Cloud"
+    "main.tags" : "Tags Cloud",
+    "main.lastAddedItems" : "Last added items",
+    "main.item" : "Item: ",
+    "main.collection" : "Collection: ",
+    "main.author" : "Author: "
  }

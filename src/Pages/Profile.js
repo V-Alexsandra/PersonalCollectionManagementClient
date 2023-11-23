@@ -101,6 +101,10 @@ function Profile() {
         }
     };
 
+    const handleEditCollection = () => {
+        toast.info('Will be implemented later...');
+    }
+
     const handleCreateCollection = async (newCollectionData) => {
         try {
             setError("");
@@ -177,12 +181,12 @@ function Profile() {
                         <Col key={index} md={12}>
                             <Row className="mt-2">
                                 <Col md={6}>
-                                    <Link to={`/collection/${collection.name}`} onClick={() => handleCollectionClick(collection.id)}>
+                                    <Link to={`/collection/${collection.name}`} onClick={() => handleCollectionClick(collection.id)} className="link-style">
                                         <p>{collection.name}</p>
                                     </Link>
                                 </Col>
                                 <Col md={6} className="text-right">
-                                    <Button variant="primary" className="btn-block" style={{ marginRight: '10px' }}>
+                                    <Button variant="primary" className="btn-block" style={{ marginRight: '10px' }} onClick={() => handleEditCollection()}>
                                         <FormattedMessage id="profile.edit" />
                                     </Button>
                                     <Button variant="danger" className="btn-block" onClick={() => handleDelete(collection.id)}>

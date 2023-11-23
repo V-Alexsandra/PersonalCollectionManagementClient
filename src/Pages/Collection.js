@@ -23,7 +23,7 @@ function Collection() {
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [itemToDelete, setItemToDelete] = useState();
     const [userRole, setUserRole] = useState();
-    const [canEditOrDelete, setCanEditOrDelete] = useState();
+    const [canEditOrDelete, setCanEditOrDelete] = useState(false);
 
     const collectionId = localStorage.getItem('selectedCollectionId');
     const token = sessionStorage.getItem("token");
@@ -85,7 +85,6 @@ function Collection() {
                 if (role === "Admin" || currentUserId === collectionData.userId) {
                     setCanEditOrDelete(true);
                 }
-                console.log(canEditOrDelete);
 
             } catch (error) {
                 handleError(error);
@@ -125,7 +124,7 @@ function Collection() {
     };
 
     const handleEditItem = () => {
-        // Handle edit logic
+        toast.info('Will be implemented later...');
     }
 
     const handleDeleteItem = (itemId) => {
@@ -166,7 +165,7 @@ function Collection() {
         return collectionItems.map((item) => (
             <tr key={item.id}>
                 <td>
-                    <Link to={`/item/${item.name}`} onClick={() => handleItemClick(item.id)}>
+                    <Link to={`/item/${item.name}`} onClick={() => handleItemClick(item.id)} className="link-style">
                         {item.name}
                     </Link>
                 </td>

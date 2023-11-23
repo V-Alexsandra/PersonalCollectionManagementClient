@@ -17,6 +17,7 @@ function Main() {
     const [tags, setTags] = useState([]);
     const [largestCollections, setLargestCollections] = useState([]);
     const [userRole, setUserRole] = useState();
+    const [lastAddedItems, setLastAddedItems] = useState([]);
 
     const token = sessionStorage.getItem("token");
     const currentUserId = sessionStorage.getItem("id");
@@ -59,16 +60,31 @@ function Main() {
         }
     }
 
+    const getLastAddedItems = async () => {
+        try {
+            const response = await axios.get(`${baseUrl}/api/Item/getlastaddeditems`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                }
+            });
+
+            setLastAddedItems(response.data);
+        } catch (error) {
+            handleError(error);
+        }
+    }
+
     const getData = () => {
         getTags();
         getLargestCollections();
+        getLastAddedItems();
     }
 
     useEffect(() => {
         const fetchData = async () => {
             const role = localStorage.getItem("role");
             setUserRole(role);
-    
+
             if (!token || !currentUserId) {
                 setIsLoggedIn(false);
                 getData();
@@ -77,7 +93,7 @@ function Main() {
                 getData();
             }
         };
-    
+
         fetchData();
     }, [token, currentUserId]);
 
@@ -135,7 +151,7 @@ function Main() {
                         <ul>
                             {largestCollections && largestCollections.map(collection => (
                                 <li key={collection.id}>
-                                    <Link to={`/collection/${collection.name}`} onClick={() => handleCollectionClick(collection.id)}>
+                                    <Link to={`/collection/${collection.name}`} onClick={() => handleCollectionClick(collection.id)} className="link-style">
                                         <p>{collection.name}</p>
                                     </Link>
                                 </li>
@@ -151,6 +167,26 @@ function Main() {
                             minSize={12}
                             maxSize={25}
                         />
+                    </Col>
+                </Row>
+                <Row>
+                    <Col className="mt-4">
+                        <h5><FormattedMessage id="main.lastAddedItems" /></h5>
+                        <ul>
+                            {lastAddedItems && lastAddedItems.map(item => (
+                                <li key={item.id}>
+                                    <Row>
+                                        <Link to={`/item/${item.id}`} className="mr-2 link-style">
+                                            <span><FormattedMessage id="main.item" /> {item.name}</span>
+                                        </Link>
+                                        <Link to={`/collection/${item.collectionId}`} className="mr-2 link-style">
+                                            <span><FormattedMessage id="main.collection" /> {item.collectionName}</span>
+                                        </Link>
+                                        <span><FormattedMessage id="main.author" /> {item.author}</span>
+                                    </Row>
+                                </li>
+                            ))}
+                        </ul>
                     </Col>
                 </Row>
             </Container>
