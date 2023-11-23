@@ -11,6 +11,7 @@ import { FormattedMessage } from 'react-intl';
 import ChooseTheme from "../Components/ChooseTheme";
 import { TagCloud } from 'react-tagcloud';
 import { HubConnectionBuilder } from '@microsoft/signalr';
+import MainBtn from "../Components/MainBtn";
 
 const baseUrl = 'https://alexav-001-site1.anytempurl.com';
 
@@ -276,21 +277,6 @@ function Item() {
         }
     };
 
-    const confirmDeleteItem = async () => {
-        try {
-            setError("");
-            await axios.delete(`${baseUrl}/api/Item/delete/${itemId}`);
-            setShowDeleteModal(false);
-            toast.success('Item deleted.', {
-                onClose: () => {
-                    window.location.reload();
-                }
-            });
-        } catch (error) {
-            handleError(error);
-        }
-    };
-
     const formatDate = (dateString) => {
         const options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' };
         return new Date(dateString).toLocaleDateString(undefined, options);
@@ -304,7 +290,10 @@ function Item() {
             />
             <Container>
                 <Row className="justify-content-center">
-                    <Col md={10} sm={12}>
+                    <Col md={1} sm={12}>
+                        <MainBtn />
+                    </Col>
+                    <Col md={9} sm={12}>
                         <Search />
                     </Col>
                     <Col md={1} sm={12}>

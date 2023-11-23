@@ -184,6 +184,7 @@ function Main() {
                                         </Link>
                                         <span><FormattedMessage id="main.author" /> {item.author}</span>
                                     </Row>
+                                    <hr></hr>
                                 </li>
                             ))}
                         </ul>

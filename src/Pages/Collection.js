@@ -11,6 +11,8 @@ import CreateItem from '../Components/CreateItem';
 import { FormattedMessage } from 'react-intl';
 import ChooseTheme from "../Components/ChooseTheme";
 import { Link } from "react-router-dom";
+import MainBtn from "../Components/MainBtn";
+
 
 const baseUrl = 'https://alexav-001-site1.anytempurl.com';
 
@@ -196,7 +198,10 @@ function Collection() {
             />
             <Container>
                 <Row className="justify-content-center">
-                    <Col md={10} sm={12}>
+                    <Col md={1} sm={12}>
+                        <MainBtn />
+                    </Col>
+                    <Col md={9} sm={12}>
                         <Search />
                     </Col>
                     <Col md={1} sm={12}>
