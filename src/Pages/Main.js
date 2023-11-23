@@ -102,8 +102,9 @@ function Main() {
         localStorage.setItem('selectedCollectionId', collectionId);
     };
 
-    const handleItemClick = (itemId) => {
+    const handleItemClick = (itemId, collectionId) => {
         localStorage.setItem('selectedItemId', itemId);
+        localStorage.setItem('selectedCollectionId', collectionId);
     }
     
     const navigate = useNavigate();
@@ -189,7 +190,7 @@ function Main() {
                             {lastAddedItems && lastAddedItems.map(item => (
                                 <li key={item.id}>
                                     <Row>
-                                        <Link to={`/item/${item.id}`} className="mr-2 link-style" onClick={() => handleItemClick(item.id)}>
+                                        <Link to={`/item/${item.id}`} className="mr-2 link-style" onClick={() => handleItemClick(item.id, item.collectionId)}>
                                             <span><FormattedMessage id="main.item" /> {item.name}</span>
                                         </Link>
                                         <Link to={`/collection/${item.collectionId}`} className="mr-2 link-style" onClick={() => handleCollectionClick(item.collectionId)}>
