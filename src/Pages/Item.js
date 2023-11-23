@@ -12,6 +12,7 @@ import ChooseTheme from "../Components/ChooseTheme";
 import { TagCloud } from 'react-tagcloud';
 import { HubConnectionBuilder } from '@microsoft/signalr';
 import MainBtn from "../Components/MainBtn";
+import { useNavigate } from 'react-router-dom';
 
 const baseUrl = 'https://alexav-001-site1.anytempurl.com';
 
@@ -182,7 +183,6 @@ function Item() {
         }
     };
 
-
     const getLikes = async () => {
         try {
             const response = await axios.get(`${baseUrl}/api/Like/count/${itemId}`, {
@@ -281,6 +281,15 @@ function Item() {
         const options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' };
         return new Date(dateString).toLocaleDateString(undefined, options);
     };
+    
+    
+    const navigate = useNavigate();
+    
+    const handleTagClick = (tag) => {
+        console.log(tag);
+        localStorage.setItem('tag', tag);
+        navigate('/tagitems');
+    }
 
     return (
         <>
@@ -336,6 +345,7 @@ function Item() {
                             tags={tags.map(tag => ({ value: tag.tag, count: 1 }))}
                             minSize={12}
                             maxSize={24}
+                            onClick={(tag) => handleTagClick(tag.value)}
                         />
                     </Col>
                 </Row>
