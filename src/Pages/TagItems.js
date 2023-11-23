@@ -68,6 +68,14 @@ function TagItems() {
         fetchData();
     }, [token, currentUserId]);
 
+    const handleItemClick = (itemId, collectionId) => {
+        localStorage.setItem('selectedItemId', itemId);
+        localStorage.setItem('selectedCollectionId', collectionId);
+    }
+
+    const handleCollectionClick = (collectionId) => {
+        localStorage.setItem('selectedCollectionId', collectionId);
+    };
     return (
         <>
             <Container>
@@ -101,10 +109,10 @@ function TagItems() {
                             {items && items.map(item => (
                                 <li key={item.id}>
                                     <Row>
-                                        <Link to={`/item/${item.id}`} className="mr-2 link-style">
+                                        <Link to={`/item/${item.id}`} className="mr-2 link-style" onClick={() => handleItemClick(item.id, item.collecionId)}>
                                             <span><FormattedMessage id="main.item" /> {item.name}</span>
                                         </Link>
-                                        <Link to={`/collection/${item.collectionId}`} className="mr-2 link-style">
+                                        <Link to={`/collection/${item.collectionId}`} className="mr-2 link-style" onClick={() => handleCollectionClick(item.collectionId)}>
                                             <span><FormattedMessage id="main.collection" /> {item.collectionName}</span>
                                         </Link>
                                         <span><FormattedMessage id="main.author" /> {item.author}</span>
