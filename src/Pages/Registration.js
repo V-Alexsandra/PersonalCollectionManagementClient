@@ -1,13 +1,11 @@
-import React, { useState } from "react";
-import axios from "axios";
-import { Container, Row, Col, Form, Button } from "react-bootstrap";
-import { Link, useNavigate } from "react-router-dom";
-import { toast } from 'react-toastify';
-import { ToastContainer } from 'react-toastify';
+import React, { useState } from 'react';
+import axios from 'axios';
+import { Container, Row, Col, Form, Button } from 'react-bootstrap';
+import { Link, useNavigate } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { FormattedMessage } from 'react-intl';
-
-const baseUrl = 'https://alexav-001-site1.anytempurl.com';
+import baseUrl from '../Config';
 
 function Registration() {
     const [formData, setFormData] = useState({

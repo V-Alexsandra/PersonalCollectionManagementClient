@@ -1,15 +1,14 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import { Button, Container, Row, Col, Table, Form, Modal } from "react-bootstrap";
-import ProfileBtn from "../Components/ProfileBtn";
-import Search from "../Components/Search";
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { Button, Container, Row, Col, Table, Form, Modal } from 'react-bootstrap';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { FormattedMessage } from 'react-intl';
-import ChooseTheme from "../Components/ChooseTheme";
-
-const baseUrl = 'https://alexav-001-site1.anytempurl.com';
+import ChooseTheme from '../Components/ChooseTheme';
+import ProfileBtn from '../Components/ProfileBtn';
+import Search from '../Components/Search';
+import baseUrl from '../Config';
 
 function Admin() {
     const [users, setUsers] = useState([]);
@@ -21,7 +20,6 @@ function Admin() {
     const [actionToConfirm, setActionToConfirm] = useState(null);
     const [error, setError] = useState(null);
     const [userRoles, setUserRoles] = useState([]);
-    const [userRole, setUserRole] = useState();
 
     const token = sessionStorage.getItem("token");
     const currentUserId = sessionStorage.getItem("id");
@@ -234,7 +232,6 @@ function Admin() {
     useEffect(() => {
         const fetchData = async () => {
             const role = await localStorage.getItem("role");
-            setUserRole(role);
     
             if (!token || !currentUserId || role !== "Admin") {
                 navigate("/");

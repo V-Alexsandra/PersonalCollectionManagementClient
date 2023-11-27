@@ -1,23 +1,20 @@
-import React, { useState, useEffect } from "react";
-import { Button, Container, Row, Col } from "react-bootstrap";
-import Search from "../Components/Search";
-import ProfileBtn from "../Components/ProfileBtn";
-import { Link } from "react-router-dom";
-import ChooseTheme from "../Components/ChooseTheme";
+import React, { useState, useEffect } from 'react';
+import { Button, Container, Row, Col } from 'react-bootstrap';
+import { Link, useNavigate } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
-import ChooseLanguage from "../Components/ChooseLanguage";
 import { TagCloud } from 'react-tagcloud';
-import axios from "axios";
-import { useNavigate } from 'react-router-dom';
-
-const baseUrl = 'https://alexav-001-site1.anytempurl.com';
+import axios from 'axios';
+import Search from '../Components/Search';
+import ChooseTheme from '../Components/ChooseTheme';
+import ChooseLanguage from '../Components/ChooseLanguage';
+import ProfileBtn from '../Components/ProfileBtn';
+import baseUrl from '../Config';
 
 function Main() {
     const [error, setError] = useState(null);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [tags, setTags] = useState([]);
     const [largestCollections, setLargestCollections] = useState([]);
-    const [userRole, setUserRole] = useState();
     const [lastAddedItems, setLastAddedItems] = useState([]);
 
     const token = sessionStorage.getItem("token");
@@ -83,9 +80,6 @@ function Main() {
 
     useEffect(() => {
         const fetchData = async () => {
-            const role = localStorage.getItem("role");
-            setUserRole(role);
-
             if (!token || !currentUserId) {
                 setIsLoggedIn(false);
                 getData();

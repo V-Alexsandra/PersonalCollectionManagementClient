@@ -1,21 +1,17 @@
-import React, { useState, useEffect } from "react";
-import { Button, Container, Row, Col } from "react-bootstrap";
-import Search from "../Components/Search";
-import ProfileBtn from "../Components/ProfileBtn";
-import { Link } from "react-router-dom";
-import ChooseTheme from "../Components/ChooseTheme";
+import React, { useState, useEffect } from 'react';
+import { Container, Row, Col } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
-import ChooseLanguage from "../Components/ChooseLanguage";
-import { TagCloud } from 'react-tagcloud';
-import axios from "axios";
-import MainBtn from "../Components/MainBtn";
-
-const baseUrl = 'https://alexav-001-site1.anytempurl.com';
+import axios from 'axios';
+import MainBtn from '../Components/MainBtn';
+import Search from '../Components/Search';
+import ProfileBtn from '../Components/ProfileBtn';
+import ChooseLanguage from '../Components/ChooseLanguage';
+import ChooseTheme from '../Components/ChooseTheme';
+import baseUrl from '../Config';
 
 function TagItems() {
     const [error, setError] = useState(null);
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const [userRole, setUserRole] = useState();
     const [items, setItems] = useState([]);
     const [tag, setTag] = useState();
 
@@ -53,16 +49,7 @@ function TagItems() {
 
     useEffect(() => {
         const fetchData = async () => {
-            const role = localStorage.getItem("role");
-            setUserRole(role);
-
-            if (!token || !currentUserId) {
-                setIsLoggedIn(false);
-                getData();
-            } else {
-                setIsLoggedIn(true);
-                getData();
-            }
+            getData();
         };
 
         fetchData();

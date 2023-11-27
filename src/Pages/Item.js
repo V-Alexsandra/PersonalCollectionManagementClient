@@ -1,24 +1,21 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import { Container, Row, Col, Table, Button, Modal, Form } from "react-bootstrap";
-import ProfileBtn from "../Components/ProfileBtn";
-import Search from "../Components/Search";
-import 'react-quill/dist/quill.snow.css';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { Container, Row, Col, Button, Form } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { FormattedMessage } from 'react-intl';
-import ChooseTheme from "../Components/ChooseTheme";
 import { TagCloud } from 'react-tagcloud';
 import { HubConnectionBuilder } from '@microsoft/signalr';
-import MainBtn from "../Components/MainBtn";
 import { useNavigate } from 'react-router-dom';
-
-const baseUrl = 'https://alexav-001-site1.anytempurl.com';
+import ProfileBtn from '../Components/ProfileBtn';
+import Search from '../Components/Search';
+import MainBtn from '../Components/MainBtn';
+import ChooseTheme from '../Components/ChooseTheme';
+import baseUrl from '../Config';
 
 function Item() {
     const [error, setError] = useState(null);
-    const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [itemData, setItemData] = useState({});
     const [collectionFields, setCollectionFields] = useState([]);
     const [tags, setTags] = useState([]);
@@ -26,7 +23,6 @@ function Item() {
     const [newComment, setNewComment] = useState("");
     const [likes, setLikes] = useState();
     const [userData, setUserData] = useState({});
-    const [hubConnection, setHubConnection] = useState(null);
 
     const collectionId = localStorage.getItem('selectedCollectionId');
     const itemId = localStorage.getItem('selectedItemId');
@@ -231,7 +227,6 @@ function Item() {
 
         try {
             await connection.start();
-            setHubConnection(connection);
         } catch (error) {
             handleError(error);
         }
@@ -249,7 +244,6 @@ function Item() {
 
         try {
             await connection.start();
-            setHubConnection(connection);
         } catch (error) {
             handleError(error);
         }

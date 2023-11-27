@@ -1,18 +1,16 @@
-import React, { useState, useEffect } from "react";
-import { Container, Row, Col, Button, Modal } from "react-bootstrap";
-import { Link } from "react-router-dom";
-import Search from "../Components/Search";
-import LogOutBtn from "../Components/LogOutBtn";
-import MainBtn from "../Components/MainBtn";
+import React, { useState, useEffect } from 'react';
+import { Container, Row, Col, Button, Modal } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
-import CreateCollection from "../Components/CreateCollection";
-import { toast } from 'react-toastify';
-import { ToastContainer } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { FormattedMessage, useIntl } from 'react-intl';
-import ChooseTheme from "../Components/ChooseTheme";
-
-const baseUrl = 'https://alexav-001-site1.anytempurl.com';
+import ChooseTheme from '../Components/ChooseTheme';
+import Search from '../Components/Search';
+import LogOutBtn from '../Components/LogOutBtn';
+import MainBtn from '../Components/MainBtn';
+import CreateCollection from '../Components/CreateCollection';
+import baseUrl from '../Config';
 
 function Profile() {
     const [userData, setUserData] = useState({});
@@ -21,7 +19,6 @@ function Profile() {
     const [showCreateModal, setShowCreateModal] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [collectionToDelete, setCollectionToDelete] = useState(null);
-    const [userRole, setUserRole] = useState();
 
     const token = sessionStorage.getItem("token");
     const currentUserId = sessionStorage.getItem("id");
@@ -66,7 +63,6 @@ function Profile() {
     };
 
     useEffect(() => {
-        setUserRole(sessionStorage.getItem("role"));
         if (!token || !currentUserId) {
             window.location.href = "/";
             return;

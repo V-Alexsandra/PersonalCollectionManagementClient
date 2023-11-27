@@ -1,20 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 import { Form, Row, Col, Button } from 'react-bootstrap';
 import axios from 'axios';
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 import { FormattedMessage } from 'react-intl';
-
-const baseUrl = 'https://alexav-001-site1.anytempurl.com';
+import baseUrl from '../Config';
 
 const CreateCollection = ({ createCollection }) => {
     const [error, setError] = useState(null);
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
-    const [imageLink, setImageLink] = useState('');
-    const [topic, setTopic] = useState('');
     const [fields, setFields] = useState([{ type: '', name: '' }]);
-    const token = sessionStorage.getItem("token");
     const currentUserId = sessionStorage.getItem("id");
     const [editedDescription, setEditedDescription] = useState('');
 
@@ -77,8 +73,6 @@ const CreateCollection = ({ createCollection }) => {
             createCollection(newCollection);
             setName('');
             setDescription('');
-            setImageLink('');
-            setTopic('');
             setFields([{ type: '', name: '' }]);
         } catch (error) {
             handleError(error);

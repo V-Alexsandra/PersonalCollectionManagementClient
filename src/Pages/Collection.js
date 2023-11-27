@@ -1,20 +1,16 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import { Container, Row, Col, Table, Button, Modal } from "react-bootstrap";
-import ProfileBtn from "../Components/ProfileBtn";
-import Search from "../Components/Search";
-import 'react-quill/dist/quill.snow.css';
-import { toast } from 'react-toastify';
-import { ToastContainer } from 'react-toastify';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { Container, Row, Col, Table, Button, Modal } from 'react-bootstrap';
+import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import CreateItem from '../Components/CreateItem';
 import { FormattedMessage } from 'react-intl';
-import ChooseTheme from "../Components/ChooseTheme";
-import { Link } from "react-router-dom";
-import MainBtn from "../Components/MainBtn";
-
-
-const baseUrl = 'https://alexav-001-site1.anytempurl.com';
+import { Link } from 'react-router-dom';
+import MainBtn from '../Components/MainBtn';
+import ProfileBtn from '../Components/ProfileBtn';
+import Search from '../Components/Search';
+import ChooseTheme from '../Components/ChooseTheme';
+import CreateItem from '../Components/CreateItem';
+import baseUrl from '../Config';
 
 function Collection() {
     const [error, setError] = useState(null);
@@ -24,7 +20,6 @@ function Collection() {
     const [showCreateModal, setShowCreateModal] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [itemToDelete, setItemToDelete] = useState();
-    const [userRole, setUserRole] = useState();
     const [canEditOrDelete, setCanEditOrDelete] = useState(false);
 
     const collectionId = localStorage.getItem('selectedCollectionId');
@@ -79,7 +74,6 @@ function Collection() {
     useEffect(() => {
         const fetchData = async () => {
             const role = await localStorage.getItem("role");
-            setUserRole(role);
 
             try {
                 await getCollectionData();

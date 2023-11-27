@@ -1,13 +1,12 @@
 import React, { useContext } from 'react';
-import { Dropdown } from 'react-bootstrap';
+import { Dropdown, Container, Row, Col } from 'react-bootstrap';
 import { FormattedMessage } from 'react-intl';
-import GlobalContext from '../contexts/globalContext';
-import { Container, Row, Col } from "react-bootstrap";
+import GlobalContext from '../Contexts/GlobalContext';
 
 const ChooseLanguage = () => {
   const handleLanguageChange = (selectedLanguage) => {
     setLocale(selectedLanguage);
-    localStorage.setItem("locale", selectedLanguage);
+    localStorage.setItem("locale", locale);
   };
 
   const { locale, setLocale } = useContext(GlobalContext);

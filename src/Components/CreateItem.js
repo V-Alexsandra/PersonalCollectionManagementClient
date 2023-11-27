@@ -1,26 +1,20 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 import { Form, Row, Col, Button } from 'react-bootstrap';
 import axios from 'axios';
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
-import Select from 'react-select';
 import { FormattedMessage } from 'react-intl';
-
-const baseUrl = 'https://alexav-001-site1.anytempurl.com';
+import Select from 'react-select';
+import baseUrl from '../Config';
 
 const CreateItem = ({ createItem }) => {
     const [error, setError] = useState(null);
     const [name, setName] = useState("");
-    const [imageLink, setImageLink] = useState("");
     const [tagInput, setTagInput] = useState("");
     const [tags, setTags] = useState([]);
     const [collectionFields, setCollectionFields] = useState([]);
-    const [fieldValue, setFieldValue] = useState("");
     const [autocompleteOptions, setAutocompleteOptions] = useState([]);
     const [fieldValues, setFieldValues] = useState({});
 
     const token = sessionStorage.getItem("token");
-    const currentUserId = sessionStorage.getItem("id");
     const collectionId = localStorage.getItem('selectedCollectionId');
 
     useEffect(() => {
@@ -84,8 +78,6 @@ const CreateItem = ({ createItem }) => {
             createItem(newItem);
             setName("");
             setTags([]);
-            setImageLink("");
-            setFieldValue("");
             setFieldValues({});
         } catch (error) {
             handleError(error);
@@ -109,10 +101,6 @@ const CreateItem = ({ createItem }) => {
             setTags([...tags, tagInput.trim()]);
             setTagInput("");
         }
-    };
-
-    const handleRemoveTag = (removedTag) => {
-        setTags(tags.filter(tag => tag !== removedTag));
     };
 
     const handleFieldValueChange = (fieldId, value, fieldType) => {

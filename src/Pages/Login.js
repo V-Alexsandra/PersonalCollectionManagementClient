@@ -1,15 +1,12 @@
-import React, { useState } from "react";
-import axios from "axios";
-import { Container, Row, Col, Form, Button } from "react-bootstrap";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useState } from 'react';
+import axios from 'axios';
+import { Container, Row, Col, Form, Button } from 'react-bootstrap';
+import { Link, useNavigate } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
-
-const baseUrl = 'https://alexav-001-site1.anytempurl.com';
+import baseUrl from '../Config';
 
 function Login() {
     const token = sessionStorage.getItem("token");
-
-    const [userRole, setUserRole] = useState();
 
     const [formData, setFormData] = useState({
         email: "",

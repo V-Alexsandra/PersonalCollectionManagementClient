@@ -1,8 +1,7 @@
 import React from 'react';
-import { Container, Row, Col, Form, Button, InputGroup } from "react-bootstrap";
+import { Container, Row, Col, Form, Button, InputGroup } from 'react-bootstrap';
 import { FormattedMessage } from 'react-intl';
-import { toast } from 'react-toastify';
-import { ToastContainer } from 'react-toastify';
+import { ToastContainer, toast  } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 function Search() {

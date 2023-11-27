@@ -9,9 +9,9 @@ import Main from './Pages/Main';
 import Collection from './Pages/Collection';
 import Item from './Pages/Item';
 import { IntlProvider } from 'react-intl';
-import enMessages from '../src/shared/localization/en.json'
-import ruMessages from '../src/shared/localization/ru.json'
-import GlobalContext from './contexts/globalContext';
+import enMessages from '../src/Shared/Localization/En.json'
+import ruMessages from '../src/Shared/Localization/Ru.json'
+import GlobalContext from './Contexts/GlobalContext';
 import TagItems from './Pages/TagItems';
 
 function App() {

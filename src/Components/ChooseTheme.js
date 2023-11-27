@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Button, Container, Row, Col } from 'react-bootstrap';
 import { FormattedMessage } from 'react-intl';
-
-const baseUrl = 'https://alexav-001-site1.anytempurl.com';
+import baseUrl from '../Config';
 
 function ChooseTheme() {
     const [currentTheme, setCurrentTheme] = useState('light');
